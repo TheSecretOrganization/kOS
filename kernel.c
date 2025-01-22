@@ -41,6 +41,19 @@ void init_term() {
 		term_buf[i] = vga_value(' ', VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 }
 
+void term_scroll() {
+	for (size_t y = 1; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			size_t index = y * VGA_WIDTH + x;
+			term_buf[index - VGA_WIDTH] = term_buf[index];
+		}
+	}
+	for (size_t x = 0; x < VGA_WIDTH; x++) {
+		size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
+		term_buf[index] = vga_value(' ', VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	}
+}
+
 void term_putchar_at(unsigned char c, size_t x, size_t y) {
 	size_t index = y * VGA_WIDTH + x;
 	term_buf[index] = vga_value(c, VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
@@ -52,6 +65,7 @@ void term_putchar(unsigned char c) {
 	if (++term_column == VGA_WIDTH || c == '\n') {
 		term_column = 0;
 		if (++term_row == VGA_HEIGHT) {
+			term_scroll();
 			term_row -= 1;
 		}
 	}
