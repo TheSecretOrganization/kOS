@@ -27,8 +27,20 @@ size_t term_row;
 size_t term_column;
 uint16_t *term_buf;
 
+static inline void outb(uint16_t port, uint8_t val) {
+	__asm__ volatile ( "outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
+}
+
 uint16_t vga_value(unsigned char c, enum vga_color fg, enum vga_color bg) {
 	return (uint16_t) c | (uint16_t) (fg | bg << 4) << 8;
+}
+
+void cursor_move(size_t x, size_t y) {
+	uint16_t pos = y * VGA_WIDTH + x;
+	outb(0x3D4, 0x0F);
+	outb(0x3D5, (uint8_t) (pos & 0xFF));
+	outb(0x3D4, 0x0E);
+	outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
 }
 
 void init_term() {
@@ -69,6 +81,7 @@ void term_putchar(unsigned char c) {
 			term_row -= 1;
 		}
 	}
+	cursor_move(term_column, term_row);
 }
 
 void term_putstr(char *str) {
@@ -80,5 +93,5 @@ void term_putstr(char *str) {
 
 void kernel_main() {
 	init_term();
-	term_putstr("42");
+	term_putstr("42\nHello World!\n");
 }
