@@ -1,7 +1,8 @@
 NAME	= aos.bin
 
-AC	 	= i386-elf-as
+AC	 	= nasm
 CC	 	= i386-elf-gcc
+AFLAG	= -f elf32
 CFLAG	= -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 $(NAME): boot.o kernel.o linker.ld
@@ -10,7 +11,7 @@ $(NAME): boot.o kernel.o linker.ld
 all: $(NAME)
 
 boot.o: boot.s
-	$(AC) $^ -o $@
+	$(AC) $(AFLAG) $^ -o $@
 
 kernel.o: kernel.c
 	$(CC) $(CFLAG) -c $^ -o $@
