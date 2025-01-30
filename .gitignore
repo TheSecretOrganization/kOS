@@ -1,2 +1,4 @@
 *.o
 aos.bin
+aos.iso
+isodir
