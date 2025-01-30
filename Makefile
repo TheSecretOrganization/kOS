@@ -2,8 +2,8 @@ NAME		= aos
 NAME_BIN	= $(NAME).bin
 NAME_ISO	= $(NAME).iso
 
-AC	 	= nasm
-CC	 	= i386-elf-gcc
+AC		= nasm
+CC		= i386-elf-gcc
 AFLAG	= -f elf32
 CFLAG	= -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
