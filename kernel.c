@@ -1,6 +1,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+void gdt_setup();
+void gdt_load();
+
+extern void reload_segments();
+
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
@@ -93,5 +98,10 @@ void term_putstr(char *str) {
 
 void kernel_main() {
 	init_term();
+
+	gdt_setup();
+	gdt_load();
+	reload_segments();
+
 	term_putstr("42\nHello World!\n");
 }
