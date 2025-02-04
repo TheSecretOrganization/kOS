@@ -5,7 +5,7 @@ NAME_ISO	= $(NAME).iso
 AC		= nasm
 CC		= i386-elf-gcc
 AFLAG	= -f elf32
-CFLAG	= -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAG	= -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g3 -mno-sse -mno-mmx -mno-80387
 
 ISO_DIR		= isodir
 GRUB_CFG	= grub.cfg

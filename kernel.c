@@ -3,6 +3,8 @@
 
 void gdt_setup();
 void gdt_load();
+void idt_setup();
+void idt_load();
 
 extern void reload_segments();
 
@@ -102,6 +104,9 @@ void kernel_main() {
 	gdt_setup();
 	gdt_load();
 	reload_segments();
+
+	idt_setup();
+	idt_load();
 
 	term_putstr("42\nHello World!\n");
 }
