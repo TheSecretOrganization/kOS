@@ -55,7 +55,7 @@ void gdt_setup() {
 }
 
 void gdt_load() {
-	gdtr.size = sizeof(gdt) - 1;
+	gdtr.size = (uint16_t) sizeof(gdt) - 1;
 	gdtr.offset = (uint32_t) &gdt;
 	
 	asm volatile ("lgdt %0" : : "m"(gdtr));
