@@ -40,7 +40,7 @@ void irq_handler(__attribute__((unused)) struct interrupt_frame *frame) {
 
 __attribute__((interrupt))
 void exception_handler(__attribute__((unused)) struct interrupt_frame *frame) {
-	term_putstr("exception!");
+	term_putstr("exception!\n");
 }
 
 void idt_set_entry(idt_entry_t *entry, uint32_t offset, uint16_t segment, uint16_t flags) {
