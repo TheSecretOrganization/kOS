@@ -8,7 +8,10 @@
 #define IDT_DPL_USER		0x60
 #define IDT_PRESENT			0x80
 
+extern uint8_t inb(uint16_t port);
 void term_putstr(char *str);
+void term_putchar(unsigned char c);
+void pic_eoi(uint8_t irq);
 
 typedef struct __attribute__((packed)) {
 	uint16_t offset_low;
@@ -30,7 +33,18 @@ struct interrupt_frame;
 
 __attribute__((interrupt)) 
 void keyboard_handler(__attribute__((unused)) struct interrupt_frame *frame) {
-	term_putstr("interrupt!");
+	uint8_t key = inb(0x60);
+
+	if (key & 0x80)
+		term_putstr("You released a key!\n");
+	else
+		term_putstr("You pressed a key!\n");
+	key &= 0x7F;
+
+	if (key == 0x1C)
+		term_putstr("You pressed enter!\n");
+
+	pic_eoi(1);
 }
 
 __attribute__((interrupt))

@@ -5,6 +5,7 @@ void gdt_setup();
 void gdt_load();
 void idt_setup();
 void idt_load();
+void pic_remap(int parent_offset, int child_offset);
 
 extern void reload_segments();
 
@@ -104,6 +105,8 @@ void kernel_main() {
 	gdt_setup();
 	gdt_load();
 	reload_segments();
+
+	pic_remap(0x20, 0x28);
 
 	idt_setup();
 	idt_load();
