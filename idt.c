@@ -34,6 +34,11 @@ void keyboard_handler(__attribute__((unused)) struct interrupt_frame *frame) {
 }
 
 __attribute__((interrupt))
+void irq_handler(__attribute__((unused)) struct interrupt_frame *frame) {
+	pic_eoi(0);
+}
+
+__attribute__((interrupt))
 void exception_handler(__attribute__((unused)) struct interrupt_frame *frame) {
 	term_putstr("exception!");
 }
@@ -49,6 +54,7 @@ void idt_set_entry(idt_entry_t *entry, uint32_t offset, uint16_t segment, uint16
 void idt_setup() {
 	for (size_t i = 0; i < 32; i++)
 		idt_set_entry(&idt[i], (uint32_t) &exception_handler, 0x08, IDT_PRESENT | IDT_GATE_INTERRUPT);
+	idt_set_entry(&idt[32], (uint32_t) &irq_handler, 0x08, IDT_PRESENT | IDT_GATE_INTERRUPT);
 	idt_set_entry(&idt[33], (uint32_t) &keyboard_handler, 0x08, IDT_PRESENT | IDT_GATE_INTERRUPT);
 }
 
