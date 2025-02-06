@@ -1,0 +1,17 @@
+-std=gnu11
+-ffreestanding
+-O2
+-Wall
+-Wextra
+-Wpedantic
+-Wconversion
+-Wshadow
+-Wstrict-prototypes
+-Wmissing-prototypes
+-fno-stack-protector
+-nostdlib
+-nodefaultlibs
+-fno-exceptions
+-fno-rtti
+-Ikernel/include
+-Ilibk/include
