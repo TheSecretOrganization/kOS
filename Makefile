@@ -8,15 +8,17 @@ all: $(NAME_ISO)
 
 $(NAME_ISO): $(NAME_BIN) $(GRUB_CFG)
 	mkdir -pv $(ISO_DIR)/boot/grub
-	cp $(KERNEL)/$(NAME_BIN) $(ISO_DIR)/boot
+	cp $(KERNEL_DIR)/$(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
 	grub-mkrescue -o $(NAME_ISO) $(ISO_DIR)
 
 $(NAME_BIN):
-	make -C $(KERNEL) all
+	make -C $(LIBK_DIR) all
+	make -C $(KERNEL_DIR) all
 
 clean:
-	make -C $(KERNEL) clean
+	make -C $(LIBK_DIR) clean
+	make -C $(KERNEL_DIR) clean
 	rm -rf $(ISO_DIR) $(NAME_ISO)
 
 re: clean
