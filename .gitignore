@@ -1,4 +1,5 @@
 *.o
-aos.bin
-aos.iso
+*.bin
+*.iso
+obj
 isodir
