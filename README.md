@@ -8,6 +8,7 @@ In order to build kOS, a few dependencies are required:
 * `grub-common`
 * `grub-pc-bin`
 * `xorriso`
+* `mtools`
 * `nasm`
 
 And the [Cross-Compiler](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz)
@@ -19,8 +20,8 @@ To test it you need:
 
 On Debian-based systems, you can install them with:
 ```sh
-sudo apt update && sudo apt install -y grub-common grub-pc-bin xorriso nasm
-wget (https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz)
+sudo apt update && sudo apt install -y grub-common grub-pc-bin xorriso mtools nasm
+wget https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
 tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
 rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
 # You can move the Cross-Compiler anywhere you like, just make sure it's first in your PATH.
