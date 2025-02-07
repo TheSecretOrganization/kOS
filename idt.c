@@ -26,6 +26,29 @@ typedef struct __attribute__((packed)) {
 	uint32_t offset;
 } idtr_t;
 
+#define KC_RELEASE	0x80
+#define KC_ENTER	0x1C
+#define KC_LSHIFT	0x2A
+#define KC_RSHIFT	0x36
+
+char keymap_qwerty[0x54] = {
+      0,   0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',   0,'\t',
+    'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 0  , 0  , 'a', 's',
+    'd', 'f', 'g', 'h', 'j', 'k', 'l', ';','\'', '`',   0,'\\', 'z', 'x', 'c', 'v',
+    'b', 'n', 'm', ',', '.', '/',   0, '*',   0, ' ',   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0, '7', '8', '9', '-', '4', '5', '6', '+', '1',
+    '2', '3', '0', '.'
+};
+
+char keymap_qwerty_shift[0x54] = {
+      0,   0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',   0,'\t',
+    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 0  , 0  , 'A', 'S',
+    'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~',   0, '|', 'Z', 'X', 'C', 'V',
+    'B', 'N', 'M', '<', '>', '?',   0, '*',   0, ' ',   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0, '7', '8', '9', '-', '4', '5', '6', '+', '1',
+    '2', '3', '0', '.'
+};
+
 idt_entry_t idt[IDT_MAX_ENTRY];
 idtr_t idtr;
 
@@ -33,16 +56,37 @@ struct interrupt_frame;
 
 __attribute__((interrupt)) 
 void keyboard_handler(__attribute__((unused)) struct interrupt_frame *frame) {
+	static int shift = 0;
+
 	uint8_t key = inb(0x60);
 
-	if (key & 0x80)
-		term_putstr("You released a key!\n");
-	else
-		term_putstr("You pressed a key!\n");
-	key &= 0x7F;
+	if (key & KC_RELEASE) {
+		switch(key & ~KC_RELEASE) {
+			case KC_LSHIFT:
+			case KC_RSHIFT:
+				shift = 0;
+				break;
+		}
+	} else {
+		char c = keymap_qwerty[key];
 
-	if (key == 0x1C)
-		term_putstr("You pressed enter!\n");
+		if (c != 0) {
+			if (shift)
+				term_putchar(keymap_qwerty_shift[key]);
+			else
+				term_putchar(keymap_qwerty[key]);
+		}
+
+		switch(key) {
+			case KC_ENTER:
+				term_putchar('\n');
+				break;
+			case KC_LSHIFT:
+			case KC_RSHIFT:
+				shift = 1;
+				break;
+		}
+	}
 
 	pic_eoi(1);
 }
