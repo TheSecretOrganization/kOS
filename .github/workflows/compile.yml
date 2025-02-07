@@ -1,0 +1,31 @@
+name: Compile
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y grub-common grub-pc-bin xorriso mtools nasm wget
+
+    - name: Install Cross-Compiler
+      run: |
+        wget -q https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
+        tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
+        rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
+        mv i386-elf-7.5.0-Linux-x86_64 kos_cross
+
+    - name: Add Cross-Compiler to Path
+      run: echo "${{ github.workspace }}/kos_cross/bin" >> $GITHUB_PATH
+
+    - name: Make
+      run: make
