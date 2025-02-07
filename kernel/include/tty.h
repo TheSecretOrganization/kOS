@@ -39,10 +39,10 @@ static inline uint16_t vga_value(unsigned char c, enum vga_color fg,
 	return vga_entry(c, vga_entry_color(fg, bg));
 }
 
-void term_init();
-void term_scroll();
-void term_move_cursor(size_t x, size_t y);
-void term_putchar_at(unsigned char c, size_t x, size_t y);
-void term_putchar(unsigned char c);
-void term_write(const char* data, size_t size);
-void term_putstr(char* str);
+void tty_init();
+void tty_scroll();
+void tty_move_cursor(size_t x, size_t y);
+void tty_putchar_at(unsigned char c, size_t x, size_t y);
+void tty_putchar(unsigned char c);
+void tty_write(const char* data, size_t size);
+void tty_putstr(char* str);
