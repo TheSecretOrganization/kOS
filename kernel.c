@@ -35,9 +35,7 @@ size_t term_row;
 size_t term_column;
 uint16_t *term_buf;
 
-static inline void outb(uint16_t port, uint8_t val) {
-	__asm__ volatile ( "outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
-}
+extern void outb(uint16_t port, uint8_t val);
 
 uint16_t vga_value(unsigned char c, enum vga_color fg, enum vga_color bg) {
 	return (uint16_t) c | (uint16_t) (fg | bg << 4) << 8;
