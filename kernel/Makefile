@@ -21,7 +21,7 @@ $(NAME_BIN): kos.ld $(OBJ)
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) -MD $(CFLAGS) $(INCLD_FLAG) $(LIB) -c $^ -o $@
+	$(CC) -MD $(CFLAGS) $(INCLD_FLAG) -c $^ -o $@
 
 $(OBJ_DIR)/%.s.o: $(SRC_DIR)/%.s
 	@mkdir -p $(@D)
