@@ -1,40 +1,34 @@
-NAME		= aos
-NAME_BIN	= $(NAME).bin
-NAME_ISO	= $(NAME).iso
+include make.config
 
-AC		= nasm
-CC		= i386-elf-gcc
-AFLAG	= -f elf32
-CFLAG	= -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+ALL_SRC := $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 
-ISO_DIR		= isodir
-GRUB_CFG	= grub.cfg
-MKRESCUE	= grub-mkrescue
-
-$(NAME_ISO): $(NAME_BIN) $(GRUB_CFG)
-	mkdir -pv $(ISO_DIR)/boot/grub
-	cp $(NAME_BIN) $(ISO_DIR)/boot
-	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
-	$(MKRESCUE) -o $(NAME_ISO) $(ISO_DIR)
-
-$(NAME_BIN): boot.o kernel.o linker.ld
-	$(CC) -T linker.ld -o $(NAME_BIN) -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+.PHONY: all clean re check-format format
 
 all: $(NAME_ISO)
 
-boot.o: boot.s
-	$(AC) $(AFLAG) $^ -o $@
+$(NAME_ISO): $(NAME_BIN) $(GRUB_CFG)
+	mkdir -pv $(ISO_DIR)/boot/grub
+	cp $(KERNEL_DIR)/$(NAME_BIN) $(ISO_DIR)/boot
+	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
+	grub-mkrescue -o $(NAME_ISO) $(ISO_DIR)
 
-kernel.o: kernel.c
-	$(CC) $(CFLAG) -c $^ -o $@
+$(NAME_BIN):
+	make -C $(LIBK_DIR) all
+	make -C $(KERNEL_DIR) all
 
 clean:
-	rm -rf boot.o kernel.o $(NAME_BIN) $(ISO_DIR)
+	make -C $(LIBK_DIR) clean
+	make -C $(KERNEL_DIR) clean
+	rm -rf $(ISO_DIR) $(NAME_ISO)
 
-fclean: clean
-	rm -rf $(NAME_ISO)
+re: clean
+	make all
 
-re: fclean $(NAME_ISO)
-
-run: $(NAME_ISO)
+run: all
 	qemu-system-i386 -cdrom $(NAME_ISO) -no-reboot
+
+check-format:
+	@clang-format --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
+
+format:
+	@clang-format -i $(ALL_SRC)
