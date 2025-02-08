@@ -1,4 +1,5 @@
 #include "tty.h"
+#include "io.h"
 #include "string.h"
 
 const size_t VGA_WIDTH = 80;

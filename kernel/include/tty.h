@@ -22,10 +22,6 @@ enum vga_color {
 	VGA_COLOR_WHITE = 15,
 };
 
-static inline void outb(uint16_t port, uint8_t val) {
-	__asm__ volatile("outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
-}
-
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
 	return fg | bg << 4;
 }
