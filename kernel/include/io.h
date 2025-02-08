@@ -12,3 +12,4 @@ static inline uint8_t inb(uint16_t port) {
 	return ret;
 }
 
+static inline void io_wait() { outb(0x80, 0); }
