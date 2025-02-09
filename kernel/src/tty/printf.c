@@ -58,9 +58,12 @@ int read_flag(char flag, va_list* ap) {
 		char* s = va_arg(*ap, char*);
 		len = !s ? putstr_count("(null)") : putstr_count(s);
 	} else if (flag == 'p') {
-		unsigned int p = va_arg(*ap, unsigned int);
+		void* p = va_arg(*ap, void*);
 		len = !p ? putstr_count("(nil)")
-				 : putstr_count("0x") + putnbr_base_unsigned(p, X_BASE_LO);
+				 : putstr_count("0x") +
+					   putnbr_base_unsigned((unsigned long)p, X_BASE_LO);
+	} else {
+		len = 0;
 	}
 	return len;
 }
@@ -71,15 +74,14 @@ int printf(const char* restrict format, ...) {
 	int start = 0;
 	int len = 0;
 	for (size_t i = 0; format[i]; i++) {
-		if (!format[i + 1]) {
-			tty_write(&format[start], i + 1 - start);
-		} else if (format[i] == '%') {
+		if (format[i] == '%' && format[i + 1]) {
 			tty_write(&format[start], i - start);
-			len += read_flag(format[i + 1], &ap);
+			len += i - start + read_flag(format[i + 1], &ap);
 			start = i + 2;
 			++i;
-		} else {
-			len++;
+		} else if (!format[i + 1]) {
+			tty_write(&format[start], i + 1 - start);
+			len += i + 1 - start;
 		}
 	}
 	va_end(ap);
