@@ -12,6 +12,35 @@ void pic_eoi(uint8_t irq) {
 	outb(PIC_PARENT_COMMAND, PIC_EOI);
 }
 
+void pic_enable_irq(uint8_t irq) {
+	uint16_t port;
+	uint8_t mask;
+
+	if (irq < 8) {
+		port = PIC_PARENT_DATA;
+	} else {
+		port = PIC_CHILD_DATA;
+		irq -= 8;
+	}
+
+	mask = inb(port) & ~(1 << irq);
+	outb(port, mask);
+}
+
+void pic_disable_irq(uint8_t irq) {
+	uint16_t port;
+	uint8_t mask;
+
+	if (irq < 8) {
+		port = PIC_PARENT_DATA;
+	} else {
+		port = PIC_CHILD_DATA;
+		irq -= 8;
+	}
+
+	mask = inb(port) | (1 << irq);
+	outb(port, mask);
+}
 
 void pic_remap(int parent_offset, int child_offset) {
 	outb_wait(PIC_PARENT_COMMAND, PIC_ICW1_INIT);
