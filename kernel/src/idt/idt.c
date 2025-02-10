@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "isr.h"
 #include <stdint.h>
 
 idt_entry_t idt[IDT_MAX_ENTRY];
@@ -14,6 +15,9 @@ void idt_set_entry(idt_entry_t* entry, uint32_t offset, uint16_t segment,
 }
 
 void idt_setup() {
+	for (uint8_t i = 0; i < 32; i++)
+		idt_set_entry(&idt[i], (uint32_t)(uintptr_t)&isr_exception_handler,
+					  0x08, IDT_PRESENT | IDT_GATE_INTERRUPT);
 }
 
 void idt_load() {
