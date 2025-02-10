@@ -14,4 +14,6 @@
 #define PIC_ICW4_8086 0x01
 
 void pic_eoi(uint8_t irq);
+void pic_enable_irq(uint8_t irq);
+void pic_disable_irq(uint8_t irq);
 void pic_remap(int parent_offset, int child_offset);
