@@ -1,5 +1,5 @@
-#include "gdt/gdt.h"
-#include "pic/pic.h"
+#include "gdt.h"
+#include "pic.h"
 #include "stdio.h"
 #include "tty.h"
 
