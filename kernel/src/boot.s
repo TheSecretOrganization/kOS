@@ -21,7 +21,7 @@ extern kernel_main
 _start:
 	mov esp, stack_top
 	call kernel_main
-	cli
+	sti
 loop:
 	hlt
 	jmp loop
