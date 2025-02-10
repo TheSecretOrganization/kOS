@@ -1,6 +1,7 @@
-#include "gdt/gdt.h"
-#include "idt/idt.h"
-#include "pic/pic.h"
+#include "gdt.h"
+#include "idt.h"
+#include "pic.h"
+#include "stdio.h"
 #include "tty.h"
 
 void kernel_main() {
@@ -10,5 +11,5 @@ void kernel_main() {
 	gdt_load();
 	idt_setup();
 	idt_load();
-	tty_putstr("42\nHello World!\n");
+	printf("%d\n%s\n", 42, "Hello World!");
 }
