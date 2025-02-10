@@ -19,11 +19,11 @@ $(LIBK): $(OBJ)
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) -MD $(CFLAGS) -I$(INCLD_DIR) -c $^ -o $@
+	$(CC) -MD $(CFLAGS) -I$(INCLD_DIR) -c $< -o $@
 
 $(OBJ_DIR)/%.s.o: $(SRC_DIR)/%.s | $(OBJ_DIR)
 	@mkdir -p $(@D)
-	$(AS) $(AFLAGS) $^ -o $@
+	$(AS) $(AFLAGS) $< -o $@
 
 clean:
 	$(RM) $(OBJ_DIR)
