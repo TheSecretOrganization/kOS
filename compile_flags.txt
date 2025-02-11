@@ -11,3 +11,6 @@
 -fno-rtti
 -Ikernel/include
 -Ilibk/include
+-mno-sse
+-mno-mmx
+-mno-80387
