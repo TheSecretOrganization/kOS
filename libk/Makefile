@@ -10,12 +10,13 @@ OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.c.o, $(SRC_C))
 OBJ			+= $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.s.o, $(SRC_S))
 DEP			:= $(OBJ:.o=.d)
 
-.PHONY: all clean re
+.PHONY: all clean re clean_root
 
 all: $(LIBK)
 
 $(LIBK): $(OBJ)
 	$(AR) rcs $@ $(OBJ)
+	make clean_root
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
@@ -31,5 +32,8 @@ clean:
 
 re: clean
 	make all
+
+clean_root:
+	$(RM) ../$(ISO_DIR) ../$(NAME_ISO)
 
 -include $(DEP)
