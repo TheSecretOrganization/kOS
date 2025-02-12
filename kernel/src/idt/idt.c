@@ -1,5 +1,6 @@
 #include "idt.h"
 #include "isr.h"
+#include "pic.h"
 #include <stdint.h>
 
 idt_entry_t idt[IDT_MAX_ENTRY];
@@ -18,6 +19,9 @@ void idt_setup() {
 	for (uint8_t i = 0; i < 32; i++)
 		idt_set_entry(&idt[i], (uint32_t)(uintptr_t)&isr_exception_handler,
 					  0x08, IDT_PRESENT | IDT_GATE_INTERRUPT);
+	idt_set_entry(&idt[33], (uint32_t)(uintptr_t)&isr_keyboard_handler, 0x08,
+				  IDT_PRESENT | IDT_GATE_INTERRUPT);
+	pic_enable_irq(1);
 }
 
 void idt_load() {
