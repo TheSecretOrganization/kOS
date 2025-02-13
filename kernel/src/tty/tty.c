@@ -58,6 +58,26 @@ void tty_putchar(unsigned char c) {
 	tty_move_cursor(tty_column, tty_row);
 }
 
+void tty_backspace() {
+	if (tty_column == 0) {
+		if (tty_row == 0)
+			return;
+		tty_column = VGA_WIDTH - 1;
+		tty_row--;
+		while ((tty_buf[tty_row * VGA_WIDTH + tty_column] & 0xFF) == ' ' &&
+			   tty_column != 0)
+			tty_column--;
+		if (tty_column != 0 ||
+			(tty_column == 0 &&
+			 (tty_buf[tty_row * VGA_WIDTH + tty_column] & 0xFF) != ' '))
+			tty_column++;
+	} else {
+		tty_column--;
+	}
+	tty_putchar_at(' ', tty_column, tty_row);
+	tty_move_cursor(tty_column, tty_row);
+}
+
 void tty_write(const char* data, size_t size) {
 	for (size_t i = 0; i < size; i++)
 		tty_putchar(data[i]);
