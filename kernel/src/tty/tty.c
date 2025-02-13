@@ -64,12 +64,12 @@ void tty_backspace() {
 			return;
 		tty_column = VGA_WIDTH - 1;
 		tty_row--;
-		while ((tty_buf[tty_row * VGA_WIDTH + tty_column] & 0xFF) == ' ' &&
+		while (vga_get_char(tty_buf[tty_row * VGA_WIDTH + tty_column]) == ' ' &&
 			   tty_column != 0)
 			tty_column--;
 		if (tty_column != 0 ||
 			(tty_column == 0 &&
-			 (tty_buf[tty_row * VGA_WIDTH + tty_column] & 0xFF) != ' '))
+			 vga_get_char(tty_buf[tty_row * VGA_WIDTH + tty_column]) != ' '))
 			tty_column++;
 	} else {
 		tty_column--;
