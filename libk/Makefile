@@ -33,7 +33,4 @@ clean:
 re: clean
 	make all
 
-clean_root:
-	$(RM) ../$(ISO_DIR) ../$(NAME_ISO)
-
 -include $(DEP)
