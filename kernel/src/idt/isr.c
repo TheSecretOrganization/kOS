@@ -5,12 +5,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define KC_RELEASE 0x80
-#define KC_ENTER 0x1C
-#define KC_LSHIFT 0x2A
-#define KC_RSHIFT 0x36
-#define KC_BACKSPACE 0x0E
-
 char keymap_qwerty[0x54] = {
 	0, 0,	 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-',	 '=',
 	0, '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[',	 ']',
