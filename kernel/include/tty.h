@@ -30,6 +30,10 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
 	return (uint16_t)uc | (uint16_t)color << 8;
 }
 
+static inline unsigned char vga_get_char(uint16_t entry) {
+	return (unsigned char)entry & 0xFF;
+}
+
 static inline uint16_t vga_value(unsigned char c, enum vga_color fg,
 								 enum vga_color bg) {
 	return vga_entry(c, vga_entry_color(fg, bg));
@@ -40,5 +44,6 @@ void tty_scroll();
 void tty_move_cursor(size_t x, size_t y);
 void tty_putchar_at(unsigned char c, size_t x, size_t y);
 void tty_putchar(unsigned char c);
+void tty_backspace();
 void tty_write(const char* data, size_t size);
 void tty_putstr(char* str);

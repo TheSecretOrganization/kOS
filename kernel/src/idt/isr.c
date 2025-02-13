@@ -8,6 +8,7 @@
 #define KC_ENTER 0x1C
 #define KC_LSHIFT 0x2A
 #define KC_RSHIFT 0x36
+#define KC_BACKSPACE 0x0E
 
 char keymap_qwerty[0x54] = {
 	0, 0,	 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-',	 '=',
@@ -58,6 +59,9 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 		case KC_LSHIFT:
 		case KC_RSHIFT:
 			shift = 1;
+			break;
+		case KC_BACKSPACE:
+			tty_backspace();
 			break;
 		}
 	}
