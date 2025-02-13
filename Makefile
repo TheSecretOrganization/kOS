@@ -2,13 +2,14 @@ include make.config
 
 ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
+LIBK		:= $(LIBK_DIR)/$(LIBK)
 
 .PHONY: all compile clean re check-format format
 
 all: compile
 	make $(NAME_ISO)
 
-$(NAME_ISO): $(GRUB_CFG)
+$(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
 	cp $(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
