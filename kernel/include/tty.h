@@ -2,6 +2,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
+
+#define TTY_MAX_SCREEN 4
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -39,6 +42,10 @@ static inline uint16_t vga_value(unsigned char c, enum vga_color fg,
 	return vga_entry(c, vga_entry_color(fg, bg));
 }
 
+static inline bool is_valid_tty(size_t n_tty) {
+	return (n_tty >= 1 && n_tty <= TTY_MAX_SCREEN);
+}
+
 void tty_init();
 void tty_scroll();
 void tty_move_cursor(size_t x, size_t y);
@@ -47,3 +54,4 @@ void tty_putchar(unsigned char c);
 void tty_backspace();
 void tty_write(const char* data, size_t size);
 void tty_putstr(char* str);
+void tty_change_screen(size_t screen_number);

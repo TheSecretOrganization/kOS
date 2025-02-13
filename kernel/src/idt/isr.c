@@ -22,6 +22,7 @@ char keymap_qwerty_shift[0x54] = {
 	0, '7',	 '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
 
 bool shift = false;
+bool alt = false;
 
 __attribute__((interrupt)) void
 isr_exception_handler(__attribute__((unused)) struct interrupt_frame* frame) {
@@ -35,17 +36,17 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 
 	if (keycode & KC_RELEASE) {
 		keycode &= ~KC_RELEASE;
-		if (keycode == KC_LSHIFT || keycode == KC_RSHIFT)
+		switch (keycode) {
+		case KC_LSHIFT:
+		case KC_RSHIFT:
 			shift = false;
+			break;
+		case KC_LALT:
+			alt = false;
+			break;
+		}
 	} else {
 		char c = keymap_qwerty[keycode];
-
-		if (c != 0) {
-			if (shift)
-				tty_putchar(keymap_qwerty_shift[keycode]);
-			else
-				tty_putchar(keymap_qwerty[keycode]);
-		}
 
 		switch (keycode) {
 		case KC_ENTER:
@@ -55,8 +56,24 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 		case KC_RSHIFT:
 			shift = true;
 			break;
+		case KC_LALT:
+			alt = true;
+			break;
 		case KC_BACKSPACE:
 			tty_backspace();
+			break;
+		default:
+			if (c == 0)
+				break;
+			if (alt) {
+				size_t alt_n = c - '0';
+				if (is_valid_tty(alt_n))
+					tty_change_screen(alt_n);
+			}
+			else if (shift)
+				tty_putchar(keymap_qwerty_shift[keycode]);
+			else
+				tty_putchar(keymap_qwerty[keycode]);
 			break;
 		}
 	}
