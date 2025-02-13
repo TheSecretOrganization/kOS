@@ -3,6 +3,7 @@
 #include "pic.h"
 #include "tty.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 #define KC_RELEASE 0x80
 #define KC_ENTER 0x1C
@@ -26,7 +27,7 @@ char keymap_qwerty_shift[0x54] = {
 	0, ' ',	 0,	  0,   0,	0,	 0,	  0,   0,	0,	 0,	  0,   0,	0,
 	0, '7',	 '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'};
 
-int shift = 0;
+bool shift = false;
 
 __attribute__((interrupt)) void
 isr_exception_handler(__attribute__((unused)) struct interrupt_frame* frame) {
@@ -41,7 +42,7 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 	if (keycode & KC_RELEASE) {
 		keycode &= ~KC_RELEASE;
 		if (keycode == KC_LSHIFT || keycode == KC_RSHIFT)
-			shift = 0;
+			shift = false;
 	} else {
 		char c = keymap_qwerty[keycode];
 
@@ -58,7 +59,7 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 			break;
 		case KC_LSHIFT:
 		case KC_RSHIFT:
-			shift = 1;
+			shift = true;
 			break;
 		case KC_BACKSPACE:
 			tty_backspace();
