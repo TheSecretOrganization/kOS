@@ -2,8 +2,8 @@
 #include "io.h"
 #include "pic.h"
 #include "tty.h"
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 char keymap_qwerty[0x54] = {
 	0, 0,	 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-',	 '=',
@@ -72,8 +72,7 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 				size_t alt_n = c - '0';
 				if (is_valid_tty(alt_n))
 					tty_change_screen(alt_n);
-			}
-			else if (shift)
+			} else if (shift)
 				tty_putchar(keymap_qwerty_shift[keycode]);
 			else
 				tty_putchar(keymap_qwerty[keycode]);

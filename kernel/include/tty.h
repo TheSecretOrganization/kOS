@@ -1,8 +1,8 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #define TTY_MAX_SCREEN 4
 #define VGA_MEMORY_BASE 0xB8000
