@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #define GDT_MAX_ENTRY 65535
+#define GDT_ADDRESS 0x00000800
 
 #define GDT_ACCESS_PRESENT 0x80
 #define GDT_ACCESS_DPL_USER 0x60
