@@ -37,11 +37,6 @@ static inline unsigned char vga_get_char(uint16_t entry) {
 	return (unsigned char)entry & 0xFF;
 }
 
-static inline uint16_t vga_value(unsigned char c, enum vga_color fg,
-								 enum vga_color bg) {
-	return vga_entry(c, vga_entry_color(fg, bg));
-}
-
 static inline bool is_valid_tty(size_t n_tty) {
 	return (n_tty >= 1 && n_tty <= TTY_MAX_SCREEN);
 }
@@ -50,6 +45,7 @@ void tty_init();
 void tty_scroll();
 void tty_move_cursor(size_t x, size_t y);
 void tty_putchar_at(unsigned char c, size_t x, size_t y);
+void tty_set_color(enum vga_color front, enum vga_color back);
 void tty_putchar(unsigned char c);
 void tty_backspace();
 void tty_write(const char* data, size_t size);

@@ -1,12 +1,14 @@
 #include "tty.h"
 #include "io.h"
 #include "string.h"
+#include <stdint.h>
 
 const size_t VGA_WIDTH = 80;
 const size_t VGA_HEIGHT = 25;
 
 size_t tty_row;
 size_t tty_column;
+uint8_t tty_color;
 uint16_t* tty_buf;
 
 void tty_move_cursor(size_t x, size_t y) {
@@ -20,11 +22,12 @@ void tty_move_cursor(size_t x, size_t y) {
 void tty_init() {
 	tty_row = 0;
 	tty_column = 0;
+	tty_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	tty_buf = (uint16_t*)0xB8000;
 
 	size_t buf_size = VGA_WIDTH * VGA_HEIGHT;
 	for (size_t i = 0; i < buf_size; i++)
-		tty_buf[i] = vga_value(' ', VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+		tty_buf[i] = vga_entry(' ', tty_color);
 }
 
 void tty_scroll() {
@@ -36,13 +39,17 @@ void tty_scroll() {
 	}
 	for (size_t x = 0; x < VGA_WIDTH; x++) {
 		size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
-		tty_buf[index] = vga_value(' ', VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+		tty_buf[index] = vga_entry(' ', tty_color);
 	}
+}
+
+void tty_set_color(enum vga_color front, enum vga_color back) {
+	tty_color = vga_entry_color(front, back);
 }
 
 void tty_putchar_at(unsigned char c, size_t x, size_t y) {
 	size_t index = y * VGA_WIDTH + x;
-	tty_buf[index] = vga_value(c, VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	tty_buf[index] = vga_entry(c, tty_color);
 }
 
 void tty_putchar(unsigned char c) {
