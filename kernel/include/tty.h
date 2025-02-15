@@ -60,6 +60,6 @@ void tty_set_color(enum vga_color front, enum vga_color back);
 void tty_putchar(unsigned char c);
 void tty_backspace();
 void tty_write(const char* data, size_t size);
-void tty_putstr(char* str);
+void tty_putstr(const char* str);
 void tty_clear();
 void tty_change_screen(size_t screen_number);
