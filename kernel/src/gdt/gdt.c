@@ -1,7 +1,7 @@
 #include "gdt.h"
 
 gdt_entry_t gdt[GDT_MAX_ENTRY];
-gdtr_t gdtr;
+gdtr_t* gdtr = (gdtr_t*)GDT_ADDRESS;
 
 void gdt_set_entry(gdt_entry_t* entry, uint32_t limit, uint32_t base,
 				   uint8_t access, uint8_t flags) {
@@ -29,8 +29,8 @@ void gdt_setup() {
 }
 
 void gdt_load() {
-	gdtr.size = (uint16_t)sizeof(gdt) - 1;
-	gdtr.offset = (uint32_t)(uintptr_t)&gdt;
+	gdtr->size = (uint16_t)sizeof(gdt) - 1;
+	gdtr->offset = (uint32_t)(uintptr_t)&gdt;
 
-	asm volatile("lgdt %0" : : "m"(gdtr));
+	asm volatile("lgdt %0" : : "m"(*gdtr));
 }
