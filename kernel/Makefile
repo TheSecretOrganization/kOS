@@ -1,4 +1,4 @@
-include ../make.config
+include ../config.mk
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj

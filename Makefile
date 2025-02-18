@@ -1,4 +1,4 @@
-include make.config
+include config.mk
 
 ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
