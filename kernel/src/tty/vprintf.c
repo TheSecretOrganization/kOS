@@ -1,6 +1,6 @@
-#include "stdio.h"
-#include "string.h"
 #include "tty.h"
+#include <stdio.h>
+#include <string.h>
 
 #define D_BASE "0123456789"
 #define X_BASE_LO "0123456789abcdef"

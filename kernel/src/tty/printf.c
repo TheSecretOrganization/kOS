@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include <stdio.h>
 
 int printf(const char* restrict format, ...) {
 	va_list ap;

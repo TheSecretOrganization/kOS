@@ -1,6 +1,6 @@
-#include "stdio.h"
-#include "string.h"
 #include "tty.h"
+#include <stdio.h>
+#include <string.h>
 
 int console_loglevel = LOGLEVEL;
 

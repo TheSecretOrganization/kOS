@@ -1,7 +1,7 @@
 #include "tty.h"
 #include "io.h"
-#include "string.h"
 #include <stdint.h>
+#include <string.h>
 
 tty_t ttys[4];
 tty_t* curr_tty = &ttys[0];

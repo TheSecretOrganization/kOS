@@ -1,8 +1,8 @@
 #include "gdt.h"
 #include "idt.h"
 #include "pic.h"
-#include "stdio.h"
 #include "tty.h"
+#include <stdio.h>
 
 void kernel_main() {
 	tty_init();
