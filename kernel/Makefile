@@ -7,9 +7,9 @@ INCLD_FLAG	:= $(addprefix -I , $(INCLUDES))
 LIB			:= ../$(LIBK_DIR)/$(LIBK)
 
 SRC_C 		:= $(shell find $(SRC_DIR) -type f -name '*.c')
-SRC_S		:= $(shell find $(SRC_DIR) -type f -name '*.s')
+SRC_S		:= $(shell find $(SRC_DIR) -type f -name '*.asm')
 OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.c.o, $(SRC_C))
-OBJ			+= $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.s.o, $(SRC_S))
+OBJ			+= $(patsubst $(SRC_DIR)/%.asm, $(OBJ_DIR)/%.asm.o, $(SRC_S))
 DEP			:= $(OBJ:.o=.d)
 
 .PHONY: all clean re
@@ -23,7 +23,7 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) -MD $(CFLAGS) $(INCLD_FLAG) -c $< -o $@
 
-$(OBJ_DIR)/%.s.o: $(SRC_DIR)/%.s
+$(OBJ_DIR)/%.asm.o: $(SRC_DIR)/%.asm
 	@mkdir -p $(@D)
 	$(AS) $(AFLAGS) $< -o $@
 
