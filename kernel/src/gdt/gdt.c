@@ -29,7 +29,7 @@ void gdt_setup() {
 	gdt_set_entry(&gdt[5], 0xFFFFF, 0,
 				  GDT_ACCESS_BASE | GDT_ACCESS_DPL_USER | GDT_ACCESS_DATA,
 				  GDT_FLAG_BASE);
-	gdt_set_entry(&gdt[3], 0xFFFFF, 0,
+	gdt_set_entry(&gdt[6], 0xFFFFF, 0,
 				  GDT_ACCESS_BASE | GDT_ACCESS_DPL_USER | GDT_ACCESS_DATA |
 					  GDT_ACCESS_DC,
 				  GDT_FLAG_BASE);
