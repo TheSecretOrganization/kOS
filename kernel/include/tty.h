@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define TTY_MAX_SCREEN 4
-#define VGA_MEMORY_BASE 0xB8000
+#define VGA_MEMORY_BASE 0xC03FF000
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 #define VGA_BUFFER_SIZE 4000
