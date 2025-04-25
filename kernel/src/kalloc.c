@@ -5,7 +5,7 @@
 pageframe_t frame_map[BITMAP_SIZE] = {0};
 pageframe_t pre_frames[PRE_FRAME_COUNT] = {0};
 
-static pageframe_t kalloc_frame_int() {
+static pageframe_t get_next_frame_addr() {
 	uint32_t i = 0;
 	while (frame_map[i] != FREE) {
 		i++;
@@ -14,6 +14,11 @@ static pageframe_t kalloc_frame_int() {
 	}
 	frame_map[i] = USED;
 	return (STARTFRAME + (i * 0x1000));
+}
+
+static void clear_pre_frames() {
+	for (uint32_t i = 0; i < PRE_FRAME_COUNT; i++)
+		pre_frames[i] = 0;
 }
 
 pageframe_t kalloc_frame() {
@@ -29,13 +34,11 @@ pageframe_t kalloc_frame() {
 		allocate = false;
 
 		for (uint32_t i = 0; i < PRE_FRAME_COUNT; i++) {
-			pre_frames[i] = kalloc_frame_int();
+			pre_frames[i] = get_next_frame_addr();
 
 			if (pre_frames[i] == FRAME_ALLOC_ERROR) {
 				allocate = true;
-
-				for (uint32_t j = 0; j < i; j++)
-					pre_frames[j] = 0;
+				clear_pre_frames();
 
 				return FRAME_ALLOC_ERROR;
 			}
