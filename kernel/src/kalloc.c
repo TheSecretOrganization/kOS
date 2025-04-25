@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 pageframe_t frame_map[BITMAP_SIZE] = {0};
-pageframe_t pre_frames[20] = {0};
+pageframe_t pre_frames[PRE_FRAME_COUNT] = {0};
 
 static pageframe_t kalloc_frame_int() {
 	uint32_t i = 0;
@@ -20,13 +20,13 @@ pageframe_t kalloc_frame() {
 	static uint8_t pframe = 0;
 	pageframe_t ret;
 
-	if (pframe == 20)
+	if (pframe == PRE_FRAME_COUNT)
 		allocate = true;
 
 	if (allocate) {
 		allocate = false;
 		pframe = 0;
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < PRE_FRAME_COUNT; i++)
 			pre_frames[i] = kalloc_frame_int();
 	}
 
@@ -37,6 +37,6 @@ pageframe_t kalloc_frame() {
 
 void kfree_frame(pageframe_t frame) {
 	uint32_t offset = frame - STARTFRAME;
-	uint32_t index = offset == 0 ? offset : offset / 0x1000;
+	uint32_t index = offset == 0 ? offset : offset / PAGE_SIZE;
 	frame_map[index] = FREE;
 }

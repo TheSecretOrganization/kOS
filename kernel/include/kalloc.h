@@ -13,6 +13,7 @@ extern uintptr_t endkernel;
 #define MEMORY_SIZE (1024 * 1024 * 1024)
 #define TOTAL_PAGES (MEMORY_SIZE / PAGE_SIZE)
 #define BITMAP_SIZE (TOTAL_PAGES / 32)
+#define PRE_FRAME_COUNT 20
 
 typedef uint32_t pageframe_t;
 
