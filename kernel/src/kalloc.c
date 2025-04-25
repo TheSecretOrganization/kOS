@@ -9,7 +9,7 @@ static pageframe_t kalloc_frame_int() {
 	while (frame_map[i] != FREE) {
 		i++;
 		if (i == BITMAP_SIZE)
-			return (ERROR);
+			return ERROR;
 	}
 	frame_map[i] = USED;
 	return (STARTFRAME + (i * 0x1000));
