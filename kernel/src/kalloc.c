@@ -1,4 +1,5 @@
 #include "kalloc.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 pageframe_t frame_map[BITMAP_SIZE] = {0};
@@ -9,7 +10,7 @@ static pageframe_t kalloc_frame_int() {
 	while (frame_map[i] != FREE) {
 		i++;
 		if (i == BITMAP_SIZE)
-			return ERROR;
+			return FRAME_ALLOC_ERROR;
 	}
 	frame_map[i] = USED;
 	return (STARTFRAME + (i * 0x1000));
@@ -24,10 +25,21 @@ pageframe_t kalloc_frame() {
 		allocate = true;
 
 	if (allocate) {
-		allocate = false;
 		pframe = 0;
-		for (int i = 0; i < PRE_FRAME_COUNT; i++)
+		allocate = false;
+
+		for (uint32_t i = 0; i < PRE_FRAME_COUNT; i++) {
 			pre_frames[i] = kalloc_frame_int();
+
+			if (pre_frames[i] == FRAME_ALLOC_ERROR) {
+				allocate = true;
+
+				for (uint32_t j = 0; j < i; j++)
+					pre_frames[j] = 0;
+
+				return FRAME_ALLOC_ERROR;
+			}
+		}
 	}
 
 	ret = pre_frames[pframe];
