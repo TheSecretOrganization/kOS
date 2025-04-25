@@ -28,7 +28,7 @@ jobs:
         path: kos_cross
 
     - name: Install Cross-Compiler
-      if: ${{ steps.compiler-cache.outcome.hit-cache != 'true' }}
+      if: ${{ steps.compiler-cache.outputs.cache-hit != 'true' }}
       run: |
         wget -q https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
         tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
