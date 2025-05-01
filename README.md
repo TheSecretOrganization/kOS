@@ -36,7 +36,15 @@ export PATH="$HOME/.local/kos_cross/bin/:$PATH"
 ## Usage
 To test the project just `make run`.
 
+## Development
+To use git hooks under .hooks, type
+```sh
+git config core.hooksPath .hooks
+```
+
 ## Resources
 * [OSDev: Bare Bones](https://wiki.osdev.org/Bare_Bones)
 * [Grub specification](https://www.gnu.org/software/grub/manual/multiboot/multiboot.html)
 * [Cross-Compiler](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz)
+
+bob
