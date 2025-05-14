@@ -18,16 +18,15 @@ To test it you need:
 * `qemu-kvm`
 * `qemu-system-x86`
 
-To install the dependencies,
-on Debian-based systems run:
+To install the dependencies on Debian-based systems run:
 ```sh
 sudo apt update && sudo apt install -y grub-common grub-pc-bin xorriso mtools nasm qemu-kvm qemu-system-x86
 ```
-on Arch run:
+To install the dependencies on Arch run:
 ```
 sudo pacman -Suy && sudo pacman -S grub mtools libisoburn qemu-desktop libvirt virt-manager
 ```
-And to install the Cross-Compile:
+And to install the Cross-Compile, run:
 ```sh
 wget https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
 tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
