@@ -13,7 +13,7 @@ $(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
 	cp $(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
-	grub-mkrescue -o $(NAME_ISO) $(ISO_DIR)
+	$(GRUB_MKRESCUE) -o $(NAME_ISO) $(ISO_DIR)
 
 compile:
 	make -C $(LIBK_DIR) all
