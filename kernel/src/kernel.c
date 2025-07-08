@@ -12,7 +12,7 @@ void kernel_main() {
 	gdt_reload();
 	idt_setup();
 	idt_load();
-	tty_set_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
+	tty_set_writter_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
 	printf("%d\n%s\n", 42, "Hello World!");
-	tty_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	tty_set_writter_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 }
