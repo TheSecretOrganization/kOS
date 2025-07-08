@@ -7,15 +7,16 @@ extern uintptr_t endkernel;
 
 #define FREE 0x00
 #define USED 0x01
+
 #define FRAME_ALLOC_ERROR 0xFFFFFFFFu
 #define STARTFRAME (((uintptr_t) & endkernel + 0xFFF) & ~0xFFF)
+
 #define PAGE_SIZE 0x1000u
 #define MEMORY_SIZE (1024 * 1024 * 1024)
 #define TOTAL_PAGES (MEMORY_SIZE / PAGE_SIZE)
 #define BITMAP_SIZE (TOTAL_PAGES / 32)
-#define PRE_FRAME_COUNT 20
 
 typedef uint32_t pageframe_t;
 
-pageframe_t kalloc_frame();
+pageframe_t kalloc_frame(void);
 void kfree_frame(pageframe_t frame);
