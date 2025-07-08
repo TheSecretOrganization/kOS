@@ -7,8 +7,8 @@
 tty_t ttys[4];
 tty_t* curr_tty = &ttys[0];
 uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
-uint8_t screen_color = VGA_COLOR_LIGHT_GREY | VGA_COLOR_BLACK << 4;
-uint8_t hidden_color = VGA_COLOR_BLACK | VGA_COLOR_BLACK << 4;
+static uint8_t screen_color = VGA_COLOR_LIGHT_GREY | VGA_COLOR_BLACK << 4;
+static uint8_t hidden_color = VGA_COLOR_BLACK | VGA_COLOR_BLACK << 4;
 
 static void set_vga_entry(unsigned char c, uint8_t color, size_t x, size_t y) {
 	size_t index = y * VGA_WIDTH + x;
