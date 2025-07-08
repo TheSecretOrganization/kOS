@@ -2,8 +2,14 @@
 
 This is an attempt at the ***kfs*** project of 42 school. Who knows where it will go.
 
-## Installation
+## Depedencies
+
 In order to build kOS, a few dependencies are required:
+
+A i386-elf cross-compiler. You can find one for linux [here](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz).\
+And some packages:
+
+### Compile
 
 * `grub-common`
 * `grub-pc-bin`
@@ -11,22 +17,30 @@ In order to build kOS, a few dependencies are required:
 * `mtools`
 * `nasm`
 
-And the [Cross-Compiler](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz)
-
-To test it you need:
+### Run
 
 * `qemu-kvm`
 * `qemu-system-x86`
 
-To install the dependencies on Debian-based systems, run:
+## Installation
+
+### Debian based distributions
+
 ```sh
 sudo apt update && sudo apt install -y grub-common grub-pc-bin xorriso mtools nasm qemu-kvm qemu-system-x86
 ```
+
+### Arch
 To install the dependencies on Arch, run:
 ```
 sudo pacman -Suy && sudo pacman -S grub mtools libisoburn qemu-desktop libvirt virt-manager
 ```
-And to install the Cross-Compile, run:
+
+### Cross-Compiler
+
+For both **Debian** and **Arch**, you will need a cross-compiler
+
+To install the recommnded one, run:
 ```sh
 wget https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
 tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
@@ -35,18 +49,20 @@ rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
 mv i386-elf-7.5.0-Linux-x86_64 ~/.local/kos_cross
 ```
 
-After this, you should add the cross-compiler to your PATH
+Don't forget to add to add it to you path, either in your `.zshrc` or by typing:
 ```sh
 export PATH="$HOME/.local/kos_cross/bin/:$PATH"
 ```
 
-For macOS just run:
+### MacOS
+
+No cross-compiler is needed, just run:
 ```sh
 brew install i686-elf-binutils i686-elf-gcc i686-elf-grub qemu
 ```
 
 ## Usage
-To test the project just `make run`.
+To run the project use `make run`.
 
 ## Development
 To use git hooks under .hooks, type
