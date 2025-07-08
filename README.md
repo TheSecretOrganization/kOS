@@ -58,7 +58,7 @@ export PATH="$HOME/.local/kos_cross/bin/:$PATH"
 
 No cross-compiler is needed, just run:
 ```sh
-brew install i686-elf-binutils i686-elf-gcc i686-elf-grub qemu
+brew install i686-elf-binutils i686-elf-gcc i686-elf-grub qemu nasm
 ```
 
 ## Usage
