@@ -40,6 +40,14 @@ static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
 	return fg | bg << 4;
 }
 
+static inline vga_color_t vga_get_color_fg(uint8_t entry_color) {
+	return (vga_color_t)(entry_color & 0x0F);
+}
+
+static inline vga_color_t vga_get_color_bg(uint8_t entry_color) {
+	return (vga_color_t)((entry_color >> 4) & 0x0F);
+}
+
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
 	return (uint16_t)uc | (uint16_t)color << 8;
 }
