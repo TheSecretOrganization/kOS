@@ -53,14 +53,14 @@ void tty_init() {
 	}
 }
 
-void tty_set_writter_color(vga_color_t fg, vga_color_t bg) {
+void tty_set_writer_color(vga_color_t fg, vga_color_t bg) {
 	curr_tty->color = vga_entry_color(fg, bg);
 }
 
 void tty_set_screen_color(vga_color_t fg, vga_color_t bg) {
 	screen_color = vga_entry_color(fg, bg);
 	hidden_color = vga_entry_color(bg, bg);
-	tty_set_writter_color(fg, bg);
+	tty_set_writer_color(fg, bg);
 }
 
 void tty_putchar_at(unsigned char c, size_t x, size_t y) {
