@@ -2,56 +2,49 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-pageframe_t frame_map[BITMAP_SIZE] = {0};
-pageframe_t pre_frames[PRE_FRAME_COUNT] = {0};
+static uint32_t frame_bitmap[BITMAP_SIZE] = {0};
 
-static pageframe_t get_next_frame_addr() {
-	uint32_t i = 0;
-	while (frame_map[i] != FREE) {
-		i++;
-		if (i == BITMAP_SIZE)
-			return FRAME_ALLOC_ERROR;
-	}
-	frame_map[i] = USED;
-	return (STARTFRAME + (i * 0x1000));
+static inline void set_frame_used(uint32_t frame_number) {
+	uint32_t index = frame_number / 32;
+	uint32_t bit = frame_number % 32;
+	frame_bitmap[index] |= (1 << bit);
 }
 
-static void clear_pre_frames() {
-	for (uint32_t i = 0; i < PRE_FRAME_COUNT; i++)
-		pre_frames[i] = 0;
+static inline void set_frame_free(uint32_t frame_number) {
+	uint32_t index = frame_number / 32;
+	uint32_t bit = frame_number % 32;
+	frame_bitmap[index] &= ~(1 << bit);
 }
 
-pageframe_t kalloc_frame() {
-	static bool allocate = true;
-	static uint8_t pframe = 0;
-	pageframe_t ret;
-
-	if (pframe == PRE_FRAME_COUNT)
-		allocate = true;
-
-	if (allocate) {
-		pframe = 0;
-		allocate = false;
-
-		for (uint32_t i = 0; i < PRE_FRAME_COUNT; i++) {
-			pre_frames[i] = get_next_frame_addr();
-
-			if (pre_frames[i] == FRAME_ALLOC_ERROR) {
-				allocate = true;
-				clear_pre_frames();
-
-				return FRAME_ALLOC_ERROR;
+static uint32_t find_free_frame(void) {
+	for (uint32_t i = 0; i < BITMAP_SIZE; i++) {
+		if (frame_bitmap[i] != 0xFFFFFFFF) {
+			for (uint32_t bit = 0; bit < 32; bit++) {
+				if (!(frame_bitmap[i] & (1 << bit))) {
+					return i * 32 + bit;
+				}
 			}
 		}
 	}
+	return FRAME_ALLOC_ERROR;
+}
 
-	ret = pre_frames[pframe];
-	pframe++;
-	return ret;
+pageframe_t kalloc_frame(void) {
+	uint32_t frame_num = find_free_frame();
+	if (frame_num == FRAME_ALLOC_ERROR)
+		return FRAME_ALLOC_ERROR;
+
+	set_frame_used(frame_num);
+	return STARTFRAME + (frame_num * PAGE_SIZE);
 }
 
 void kfree_frame(pageframe_t frame) {
-	uint32_t offset = frame - STARTFRAME;
-	uint32_t index = offset == 0 ? offset : offset / PAGE_SIZE;
-	frame_map[index] = FREE;
+	if (frame < STARTFRAME)
+		return;
+
+	uint32_t frame_num = (frame - STARTFRAME) / PAGE_SIZE;
+	if (frame_num >= TOTAL_PAGES)
+		return;
+
+	set_frame_free(frame_num);
 }
