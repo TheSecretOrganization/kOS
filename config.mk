@@ -11,6 +11,14 @@ LIBK_DIR			= libk
 LIBK				= libk.a
 GRUB_CFG			= grub.cfg
 
+OS = $(shell uname -s)
+ifeq ($(OS),Darwin)
+HOST = i686-elf
+GRUB_MKRESCUE = $(HOST)-grub-mkrescue
+else
+GRUB_MKRESCUE = grub-mkrescue
+endif
+
 CC					= $(HOST)-gcc
 CPP					= $(HOST)-g++
 AS					= nasm
