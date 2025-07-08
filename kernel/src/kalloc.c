@@ -19,11 +19,9 @@ static inline void set_frame_free(uint32_t frame_number) {
 static uint32_t find_free_frame(void) {
 	for (uint32_t i = 0; i < BITMAP_SIZE; i++) {
 		if (frame_bitmap[i] != 0xFFFFFFFF) {
-			for (uint32_t bit = 0; bit < 32; bit++) {
-				if (!(frame_bitmap[i] & (1 << bit))) {
-					return i * 32 + bit;
-				}
-			}
+			uint32_t bit = __builtin_ctz(~frame_bitmap[i]);
+			if (bit < 32)
+				return i * 32 + bit;
 		}
 	}
 	return FRAME_ALLOC_ERROR;
