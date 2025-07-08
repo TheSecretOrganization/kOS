@@ -2,11 +2,11 @@
 
 This is an attempt at the ***kfs*** project of 42 school. Who knows where it will go.
 
-## Depedencies
+## Dependencies
 
 In order to build kOS, a few dependencies are required:
 
-A i386-elf cross-compiler. You can find one for linux [here](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz).\
+An i386-elf cross-compiler. You can find one for Linux [here](https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz).\
 And some packages:
 
 ### Compile
@@ -40,7 +40,7 @@ sudo pacman -Suy && sudo pacman -S grub mtools libisoburn qemu-desktop libvirt v
 
 For both **Debian** and **Arch**, you will need a cross-compiler
 
-To install the recommnded one, run:
+To install the recommended one, run:
 ```sh
 wget https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
 tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
@@ -49,7 +49,7 @@ rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
 mv i386-elf-7.5.0-Linux-x86_64 ~/.local/kos_cross
 ```
 
-Don't forget to add to add it to you path, either in your `.zshrc` or by typing:
+Don't forget to add it to your PATH, either in your `.zshrc` or by typing:
 ```sh
 export PATH="$HOME/.local/kos_cross/bin/:$PATH"
 ```
