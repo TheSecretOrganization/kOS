@@ -1,6 +1,7 @@
 #include "frame.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 static uint32_t frame_bitmap[BITMAP_SIZE] = {0};
 
@@ -33,7 +34,9 @@ pageframe_t alloc_frame(void) {
 		return FRAME_ALLOC_ERROR;
 
 	set_frame_used(frame_num);
-	return STARTFRAME + (frame_num * PAGE_SIZE);
+	pageframe_t frame = STARTFRAME + (frame_num * PAGE_SIZE);
+	bzero((void*)frame, PAGE_SIZE);
+	return frame;
 }
 
 void free_frame(pageframe_t frame) {
@@ -44,5 +47,6 @@ void free_frame(pageframe_t frame) {
 	if (frame_num >= TOTAL_PAGES)
 		return;
 
+	bzero((void*)frame, PAGE_SIZE);
 	set_frame_free(frame_num);
 }
