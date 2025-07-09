@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <string.h>
 
-tty_t ttys[4];
-tty_t* curr_tty = &ttys[0];
-uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
+static tty_t ttys[4];
+static tty_t* curr_tty = &ttys[0];
+static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
 static uint8_t screen_color = VGA_COLOR_LIGHT_GREY | VGA_COLOR_BLACK << 4;
 static uint8_t hidden_color = VGA_COLOR_BLACK | VGA_COLOR_BLACK << 4;
 
