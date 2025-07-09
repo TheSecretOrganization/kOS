@@ -9,7 +9,7 @@ extern uintptr_t endkernel;
 #define USED 0x01
 
 #define FRAME_ALLOC_ERROR 0xFFFFFFFFu
-#define STARTFRAME (((uintptr_t) & endkernel + 0xFFF) & ~0xFFF)
+#define STARTFRAME (((uintptr_t) &endkernel + 0xFFF) & (~0xFFF))
 
 #define PAGE_SIZE 0x1000u
 #define MEMORY_SIZE (1024 * 1024 * 1024)
