@@ -1,4 +1,4 @@
-#include "kalloc.h"
+#include "frame.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -27,7 +27,7 @@ static uint32_t find_free_frame(void) {
 	return FRAME_ALLOC_ERROR;
 }
 
-pageframe_t kalloc_frame(void) {
+pageframe_t alloc_frame(void) {
 	uint32_t frame_num = find_free_frame();
 	if (frame_num == FRAME_ALLOC_ERROR)
 		return FRAME_ALLOC_ERROR;
@@ -36,7 +36,7 @@ pageframe_t kalloc_frame(void) {
 	return STARTFRAME + (frame_num * PAGE_SIZE);
 }
 
-void kfree_frame(pageframe_t frame) {
+void free_frame(pageframe_t frame) {
 	if (frame < STARTFRAME)
 		return;
 

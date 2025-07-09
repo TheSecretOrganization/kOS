@@ -18,5 +18,5 @@ extern uintptr_t endkernel;
 
 typedef uint32_t pageframe_t;
 
-pageframe_t kalloc_frame(void);
-void kfree_frame(pageframe_t frame);
+pageframe_t alloc_frame(void);
+void free_frame(pageframe_t frame);
