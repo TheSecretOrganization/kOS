@@ -16,7 +16,7 @@ extern uintptr_t endkernel;
 #define TOTAL_PAGES (MEMORY_SIZE / PAGE_SIZE)
 #define BITMAP_SIZE (TOTAL_PAGES / 32)
 
-typedef uint32_t pageframe_t;
+typedef uintptr_t pageframe_t;
 
 pageframe_t alloc_frame(void);
 void free_frame(pageframe_t frame);
