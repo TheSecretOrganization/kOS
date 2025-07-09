@@ -67,6 +67,7 @@ void tty_putchar_at(unsigned char c, size_t x, size_t y);
 void tty_putchar(unsigned char c);
 void tty_write(const char* data, size_t size);
 void tty_putstr(const char* str);
-void tty_backspace();
 void tty_clear();
+void tty_backspace();
+void tty_move_cursor(size_t x, size_t y);
 void tty_change_screen(size_t screen_number);
