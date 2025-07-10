@@ -61,8 +61,7 @@ static inline bool is_valid_tty(size_t n_tty) {
 }
 
 void tty_init();
-void tty_set_writer_color(vga_color_t fg, vga_color_t bg);
-void tty_set_screen_color(vga_color_t fg, vga_color_t bg);
+void tty_set_color(vga_color_t fg, vga_color_t bg);
 void tty_putchar_at(unsigned char c, size_t x, size_t y);
 void tty_putchar(unsigned char c);
 void tty_write(const char* data, size_t size);

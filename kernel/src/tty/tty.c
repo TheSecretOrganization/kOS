@@ -7,21 +7,18 @@
 static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
 static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
-static uint8_t screen_color = VGA_COLOR_LIGHT_GREY | VGA_COLOR_BLACK << 4;
-static uint8_t hidden_color = VGA_COLOR_BLACK | VGA_COLOR_BLACK << 4;
 
-static void set_vga_entry(unsigned char c, uint8_t color, size_t x, size_t y) {
-	size_t index = y * VGA_WIDTH + x;
-	vga_buf[index] = vga_entry(c, color);
+static inline unsigned char get_char(size_t x, size_t y) {
+	return vga_get_char(vga_buf[y * VGA_WIDTH + x]);
+}
+
+static inline unsigned char get_current_char() {
+	return get_char(curr_tty->column, curr_tty->row);
 }
 
 static void putendl(size_t y) {
 	for (size_t x = 0; x < VGA_WIDTH; x++)
-		set_vga_entry(' ', screen_color, x, y);
-}
-
-static inline char get_current_char() {
-	return vga_get_char(vga_buf[curr_tty->row * VGA_WIDTH + curr_tty->column]);
+		tty_putchar_at(' ', x, y);
 }
 
 static void scroll() {
@@ -35,7 +32,7 @@ static void scroll() {
 }
 
 void tty_init() {
-	curr_tty->color = screen_color;
+	curr_tty->color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	tty_clear();
 	for (size_t i = 0; i < TTY_MAX_SCREEN; i++) {
 		ttys[i].row = 0;
@@ -45,26 +42,17 @@ void tty_init() {
 	}
 }
 
-void tty_set_writer_color(vga_color_t fg, vga_color_t bg) {
+void tty_set_color(vga_color_t fg, vga_color_t bg) {
 	curr_tty->color = vga_entry_color(fg, bg);
 }
 
-void tty_set_screen_color(vga_color_t fg, vga_color_t bg) {
-	screen_color = vga_entry_color(fg, bg);
-	hidden_color = vga_entry_color(bg, bg);
-	tty_set_writer_color(fg, bg);
-}
-
 void tty_putchar_at(unsigned char c, size_t x, size_t y) {
-	set_vga_entry(c, curr_tty->color, x, y);
+	size_t index = y * VGA_WIDTH + x;
+	vga_buf[index] = vga_entry(c, curr_tty->color);
 }
 
 void tty_putchar(unsigned char c) {
-	if (c == ' ' && curr_tty->column == VGA_WIDTH - 1)
-		c = '\n';
-	if (c == '\n')
-		set_vga_entry(c, hidden_color, curr_tty->column, curr_tty->row);
-	else
+	if (c != '\n')
 		tty_putchar_at(c, curr_tty->column, curr_tty->row);
 	if (++curr_tty->column == VGA_WIDTH || c == '\n') {
 		curr_tty->column = 0;
@@ -97,12 +85,13 @@ void tty_backspace() {
 			return;
 		curr_tty->column = VGA_WIDTH - 1;
 		curr_tty->row--;
-		while (get_current_char() == ' ' && curr_tty->column != 0)
+		while (curr_tty->column != 0 && get_current_char() == ' ' &&
+			   get_char(curr_tty->column - 1, curr_tty->row) == ' ')
 			curr_tty->column--;
 	} else {
 		curr_tty->column--;
 	}
-	set_vga_entry(' ', screen_color, curr_tty->column, curr_tty->row);
+	tty_putchar_at(' ', curr_tty->column, curr_tty->row);
 	tty_move_cursor(curr_tty->column, curr_tty->row);
 }
 
