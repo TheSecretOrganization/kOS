@@ -3,3 +3,4 @@
 *.iso
 obj
 isodir
+.gdb_history
