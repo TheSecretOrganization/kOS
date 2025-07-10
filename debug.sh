@@ -26,9 +26,9 @@ fi
 
 kernel_bin="$1"
 
-if which pwndbg >/dev/null 2>&1; then
+if command -v pwndbg >/dev/null 2>&1; then
   dbg=pwndbg
-elif which gdb >/dev/null 2>&1; then
+elif command -v gdb >/dev/null 2>&1; then
   dbg=gdb
 else
   echo "Please install pwndbg or gdb"

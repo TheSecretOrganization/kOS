@@ -38,4 +38,4 @@ format:
 	@clang-format -i $(ALL_SRC)
 
 debug: $(DEBUG_SH) $(NAME_BIN)
-	./$(DEBUG_SH) $(NAME_BIN)
+	@./$(DEBUG_SH) $(NAME_BIN)
