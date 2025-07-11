@@ -4,6 +4,7 @@ ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
 DEBUG_SH := debug.sh
+BREAKPOINT ?=
 
 .PHONY: all compile clean re check-format format debug
 
@@ -38,4 +39,4 @@ format:
 	@clang-format -i $(ALL_SRC)
 
 debug: $(DEBUG_SH) $(NAME_BIN)
-	@./$(DEBUG_SH) $(NAME_BIN)
+	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)
