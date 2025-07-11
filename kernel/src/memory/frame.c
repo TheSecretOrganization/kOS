@@ -18,7 +18,7 @@ static inline void set_frame_free(uint32_t frame_number) {
 }
 
 static uint32_t find_free_frame(void) {
-	for (uint32_t i = 0; i < BITMAP_SIZE; i++) {
+  for (uint32_t i = 0; i < BITMAP_SIZE; i++) {
 		if (frame_bitmap[i] != 0xFFFFFFFF) {
 			uint32_t bit = __builtin_ctz(~frame_bitmap[i]);
 			if (bit < 32)
@@ -28,18 +28,18 @@ static uint32_t find_free_frame(void) {
 	return FRAME_ALLOC_ERROR;
 }
 
-pageframe_t alloc_frame(void) {
+page_frame_t alloc_frame(void) {
 	uint32_t frame_num = find_free_frame();
 	if (frame_num == FRAME_ALLOC_ERROR)
 		return FRAME_ALLOC_ERROR;
 
 	set_frame_used(frame_num);
-	pageframe_t frame = STARTFRAME + (frame_num * PAGE_SIZE);
+	page_frame_t frame = STARTFRAME + (frame_num * PAGE_SIZE);
 	bzero((void*)frame, PAGE_SIZE);
 	return frame;
 }
 
-void free_frame(pageframe_t frame) {
+void free_frame(page_frame_t frame) {
 	if (frame < STARTFRAME)
 		return;
 
