@@ -22,9 +22,15 @@ done
 if [[ -z $1 ]]; then
   usage
   exit 1
+else
+  kernel_bin="$1"
 fi
 
-kernel_bin="$1"
+if [[ -z $2 ]]; then
+  breakpoint="kernel_main"
+else
+  breakpoint="$2"
+fi
 
 if command -v pwndbg >/dev/null 2>&1; then
   dbg=pwndbg
@@ -36,4 +42,4 @@ else
 fi
 
 qemu-system-i386 -kernel "$kernel_bin" -no-reboot -S -s &
-$dbg -ex "target remote localhost:1234" -ex "break kernel_main" -ex "continue" "$kernel_bin"
+$dbg -ex "target remote localhost:1234" -ex "break $breakpoint" -ex "continue" "$kernel_bin"
