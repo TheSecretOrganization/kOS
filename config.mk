@@ -33,10 +33,10 @@ CFLAGS_COMMON			= -std=gnu11 -ffreestanding -Wall -Wextra -Wshadow -mno-sse -mno
 CFLAGS_RELEASE		= -O2
 CFLAGS_DEBUG			= -O0 -g
 
-ifeq (DEBUG, 1)
-CFLAGS						= $(CFLAGS_COMMON) $(CFLAGS_RELEASE) $(MANDATORY_CFLAGS)
-else
+ifeq ($(DEBUG), 1)
 CFLAGS						= $(CFLAGS_COMMON) $(CFLAGS_DEBUG) $(MANDATORY_CFLAGS)
+else
+CFLAGS						= $(CFLAGS_COMMON) $(CFLAGS_RELEASE) $(MANDATORY_CFLAGS)
 endif
 
 CPPFLAGS_COMMON		=
