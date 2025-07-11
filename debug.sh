@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-  echo "Usage: $0 <kernel.bin>"
+  echo "Usage: $0 <kernel.bin> [breakpoint]"
 }
 
 while getopts ":h" opt; do
