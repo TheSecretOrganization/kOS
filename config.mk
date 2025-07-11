@@ -1,4 +1,4 @@
-HOST				= i386-elf
+TARGET				= i386-elf
 ARCH				= i386
 NAME				= kos
 NAME_BIN			= $(NAME).bin
@@ -13,17 +13,17 @@ GRUB_CFG			= grub.cfg
 
 OS = $(shell uname -s)
 ifeq ($(OS),Darwin)
-HOST = i686-elf
-GRUB_MKRESCUE = $(HOST)-grub-mkrescue
+TARGET = i686-elf
+GRUB_MKRESCUE = $(TARGET)-grub-mkrescue
 else
 GRUB_MKRESCUE = grub-mkrescue
 endif
 
-CC					= $(HOST)-gcc
-CPP					= $(HOST)-g++
+CC					= $(TARGET)-gcc
+CPP					= $(TARGET)-g++
 AS					= nasm
-AR					= $(HOST)-ar
-GDB					= $(HOST)-gdb
+AR					= $(TARGET)-ar
+GDB					= $(TARGET)-gdb
 RM					= rm -rf
 
 AFLAGS				= -f elf32
