@@ -1,4 +1,4 @@
-HOST				= i386-elf
+TARGET				= i386-elf
 ARCH				= i386
 NAME				= kos
 NAME_BIN			= $(NAME).bin
@@ -11,26 +11,33 @@ LIBK_DIR			= libk
 LIBK				= libk.a
 GRUB_CFG			= grub.cfg
 
-OS = $(shell uname -s)
+OS					= $(shell uname -s)
 ifeq ($(OS),Darwin)
-HOST = i686-elf
-GRUB_MKRESCUE = $(HOST)-grub-mkrescue
+TARGET				= i686-elf
+GRUB_MKRESCUE		= $(TARGET)-grub-mkrescue
 else
-GRUB_MKRESCUE = grub-mkrescue
+GRUB_MKRESCUE		= grub-mkrescue
 endif
 
-CC					= $(HOST)-gcc
-CPP					= $(HOST)-g++
+CC					= $(TARGET)-gcc
+CPP					= $(TARGET)-g++
 AS					= nasm
-AR					= $(HOST)-ar
-GDB					= $(HOST)-gdb
+AR					= $(TARGET)-ar
+GDB					= $(TARGET)-gdb
 RM					= rm -rf
 
 AFLAGS				= -f elf32
 
-CFLAGS_COMMON		= -std=gnu11 -ffreestanding -O2 -Wall -Wextra -Wshadow -g3 -mno-sse -mno-mmx -mno-80387
 MANDATORY_CFLAGS	= -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
-CFLAGS				= $(CFLAGS_COMMON) $(MANDATORY_CFLAGS)
+CFLAGS_COMMON		= -std=gnu11 -ffreestanding -Wall -Wextra -Wshadow -mno-sse -mno-mmx -mno-80387
+CFLAGS_RELEASE		= -O2
+CFLAGS_DEBUG		= -O0 -g
+
+ifeq ($(DEBUG), 1)
+CFLAGS				= $(CFLAGS_COMMON) $(CFLAGS_DEBUG) $(MANDATORY_CFLAGS)
+else
+CFLAGS				= $(CFLAGS_COMMON) $(CFLAGS_RELEASE) $(MANDATORY_CFLAGS)
+endif
 
 CPPFLAGS_COMMON		=
 MANDATORY_CPPFLAGS	= -fno-exceptions -fno-rtti
