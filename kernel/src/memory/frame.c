@@ -28,23 +28,23 @@ static uint32_t find_free_frame(void) {
 	return FRAME_ALLOC_ERROR;
 }
 
-pageframe_t alloc_frame(void) {
+uint32_t alloc_frame(void) {
 	uint32_t frame_num = find_free_frame();
 	if (frame_num == FRAME_ALLOC_ERROR)
 		return FRAME_ALLOC_ERROR;
 
 	set_frame_used(frame_num);
-	pageframe_t frame = STARTFRAME + (frame_num * PAGE_SIZE);
+	uint32_t frame = START_FRAME + (frame_num * PAGE_SIZE);
 	bzero((void*)frame, PAGE_SIZE);
 	return frame;
 }
 
-void free_frame(pageframe_t frame) {
-	if (frame < STARTFRAME)
+void free_frame(uint32_t frame) {
+	if (frame < START_FRAME)
 		return;
 
-	uint32_t frame_num = (frame - STARTFRAME) / PAGE_SIZE;
-	if (frame_num >= TOTAL_PAGES)
+	uint32_t frame_num = (frame - START_FRAME) / PAGE_SIZE;
+	if (frame_num >= TOTAL_FRAMES)
 		return;
 
 	bzero((void*)frame, PAGE_SIZE);
