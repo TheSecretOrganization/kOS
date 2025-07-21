@@ -38,7 +38,7 @@ uint32_t alloc_frame(void) {
 
 	set_frame_used(frame_num);
 	uint32_t frame = START_FRAME + (frame_num * PAGE_SIZE);
-	bzero((void*)frame, PAGE_SIZE);
+	memset((void*)frame, 0, PAGE_SIZE);
 	return frame;
 }
 
@@ -50,6 +50,6 @@ void free_frame(uint32_t frame) {
 	if (frame_num >= TOTAL_FRAMES)
 		return;
 
-	bzero((void*)frame, PAGE_SIZE);
+	memset((void*)frame, 0, PAGE_SIZE);
 	set_frame_free(frame_num);
 }
