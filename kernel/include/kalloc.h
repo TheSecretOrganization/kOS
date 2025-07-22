@@ -3,13 +3,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-extern uintptr_t endkernel;
+extern uintptr_t _kernel_end;
 
 #define FREE 0x00
 #define USED 0x01
 
 #define FRAME_ALLOC_ERROR 0xFFFFFFFFu
-#define STARTFRAME (((uintptr_t) & endkernel + 0xFFF) & ~0xFFF)
+#define STARTFRAME (((uintptr_t) & _kernel_end + 0xFFF) & ~0xFFF)
 
 #define PAGE_SIZE 0x1000u
 #define MEMORY_SIZE (1024 * 1024 * 1024)
