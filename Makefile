@@ -3,8 +3,10 @@ include config.mk
 ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
+DEBUG_SH	:= debug.sh
+BREAKPOINT	?=
 
-.PHONY: all compile clean re check-format format
+.PHONY: all compile clean re check-format format debug
 
 all: compile
 	make $(NAME_ISO)
@@ -13,7 +15,7 @@ $(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
 	cp $(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
-	grub-mkrescue -o $(NAME_ISO) $(ISO_DIR)
+	$(GRUB_MKRESCUE) -o $(NAME_ISO) $(ISO_DIR)
 
 compile:
 	make -C $(LIBK_DIR) all
@@ -35,3 +37,6 @@ check-format:
 
 format:
 	@clang-format -i $(ALL_SRC)
+
+debug: $(DEBUG_SH) $(NAME_BIN)
+	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)

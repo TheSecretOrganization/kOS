@@ -17,7 +17,7 @@ typedef struct {
 	uint16_t buf[VGA_BUFFER_SIZE];
 } tty_t;
 
-enum vga_color {
+typedef enum vga_color {
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
 	VGA_COLOR_GREEN = 2,
@@ -34,10 +34,18 @@ enum vga_color {
 	VGA_COLOR_LIGHT_MAGENTA = 13,
 	VGA_COLOR_LIGHT_BROWN = 14,
 	VGA_COLOR_WHITE = 15,
-};
+} vga_color_t;
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
+static inline uint8_t vga_entry_color(vga_color_t fg, vga_color_t bg) {
 	return fg | bg << 4;
+}
+
+static inline vga_color_t vga_get_color_fg(uint8_t entry_color) {
+	return (vga_color_t)(entry_color & 0x0F);
+}
+
+static inline vga_color_t vga_get_color_bg(uint8_t entry_color) {
+	return (vga_color_t)((entry_color >> 4) & 0x0F);
 }
 
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
@@ -53,13 +61,12 @@ static inline bool is_valid_tty(size_t n_tty) {
 }
 
 void tty_init();
-void tty_scroll();
-void tty_move_cursor(size_t x, size_t y);
+void tty_set_color(vga_color_t fg, vga_color_t bg);
 void tty_putchar_at(unsigned char c, size_t x, size_t y);
-void tty_set_color(enum vga_color front, enum vga_color back);
 void tty_putchar(unsigned char c);
-void tty_backspace();
 void tty_write(const char* data, size_t size);
 void tty_putstr(const char* str);
 void tty_clear();
+void tty_backspace();
+void tty_move_cursor(size_t x, size_t y);
 void tty_change_screen(size_t screen_number);
