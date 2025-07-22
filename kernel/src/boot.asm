@@ -15,13 +15,22 @@ stack_bottom:
 stack_top:
 
 section .text
-global _start
+extern tty_init
+extern paging_setup
 extern kernel_main
 
+global _start
 _start:
+    cli
+    call tty_init
+    call paging_setup
+
+global hh_entrypoint
+hh_entrypoint:
 	mov esp, stack_top
 	call kernel_main
-	sti
-loop:
+    sti
+
+.hang:
 	hlt
-	jmp loop
+	jmp .hang

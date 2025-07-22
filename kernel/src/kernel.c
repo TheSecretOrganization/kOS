@@ -6,15 +6,16 @@
 #include <stdio.h>
 
 void kernel_main() {
-	tty_init();
+	// tty_init();
 	pic_remap(0x20, 0x28);
 	gdt_setup();
 	gdt_load();
 	gdt_reload();
 	idt_setup();
 	idt_load();
-	paging_setup();
 	tty_set_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
 	printf("%d\n%s\n", 42, "Hello World!");
 	tty_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	void* pd_addr = get_phys_addr((void*)PD_VIRTUAL_ADDR);
+	printf("%p\n", pd_addr);
 }

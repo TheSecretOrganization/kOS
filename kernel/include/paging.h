@@ -5,9 +5,8 @@
 extern uint32_t _kernel_start;
 extern uint32_t _kernel_end;
 
-#define KERNEL_PHYS_BASE _kernel_start
-#define KERNEL_VIRT_BASE 0xC0000000
-#define KERNEL_SIZE (_kernel_end - _kernel_start)
+#define KERNEL_PHYS_BASE 0x00200000
+#define KERNEL_VIRT_BASE 0xC0200000
 
 #define ENTRIES_PER_TABLE 1024u
 #define PAGE_SIZE 0x1000u
@@ -26,10 +25,11 @@ extern uint32_t _kernel_end;
 #define PT_RECURSIVE_BASE 0xFFC00000UL
 
 #define IS_PAGE_ALIGNED(addr) (!((uint32_t)(addr) & 0xFFF))
-#define GET_PD_INDEX(virtualaddr) (virtualaddr >> 22)
-#define GET_PT_INDEX(virtualaddr) (virtualaddr >> 12 & 0x03FF)
+#define GET_PD_INDEX(virt_addr) (virt_addr >> 22)
+#define GET_PT_INDEX(virt_addr) (virt_addr >> 12 & 0x03FF)
 #define GET_FRAME_ADDR(entry) ((entry) & 0xFFFFF000)
 #define GET_PAGE_OFFSET(addr) ((unsigned long)(addr) & 0xFFF)
-#define GET_PT(pdindex) (PT_RECURSIVE_BASE + (ENTRIES_PER_TABLE * pdindex))
+#define GET_PT(pdindex) (PT_RECURSIVE_BASE + (PAGE_SIZE * pdindex))
 
 void paging_setup();
+void* get_phys_addr(void* virt_addr);
