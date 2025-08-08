@@ -1,8 +1,10 @@
+OUTPUT_FORMAT(elf32-i386)
 ENTRY(_start)
-
 SECTIONS
 {
 	. = 2M;
+
+    _kernel_start = .;
 
 	.text BLOCK(4K) : ALIGN(4K)
 	{
@@ -24,6 +26,7 @@ SECTIONS
 	{
 		*(COMMON)
 		*(.bss)
-        endkernel = .;
 	}
+
+    _kernel_end = .;
 }
