@@ -33,7 +33,7 @@ sudo apt update && sudo apt install -y grub-common grub-pc-bin xorriso mtools na
 ### Arch
 To install the dependencies on Arch, run:
 ```
-sudo pacman -Suy && sudo pacman -S grub mtools libisoburn qemu-desktop libvirt virt-manager
+sudo pacman -Suy && sudo pacman -S grub mtools libisoburn qemu-desktop libvirt virt-manager nasm
 ```
 
 ### Cross-Compiler
