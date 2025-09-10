@@ -13,14 +13,6 @@ static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
 static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
 
-static inline unsigned char get_char(size_t x, size_t y) {
-	return vga_get_char(vga_buf[y * VGA_WIDTH + x]);
-}
-
-static inline unsigned char get_current_char() {
-	return get_char(curr_tty->column, curr_tty->row);
-}
-
 static void putendl(size_t y) {
 	for (size_t x = 0; x < VGA_WIDTH; x++)
 		tty_putchar_at(' ', x, y);
@@ -116,7 +108,7 @@ void tty_print_prompt() {
 }
 
 static void build_command(char *buf) {
-	char *command = (char *) &vga_buf[curr_tty->row * VGA_WIDTH + strlen(TTY_PROMPT)];
+	const char *command = (char *) &vga_buf[curr_tty->row * VGA_WIDTH + strlen(TTY_PROMPT)];
 	for (size_t i = 0; i < curr_tty->column - strlen(TTY_PROMPT); i++)
 		buf[i] = command[i * 2];
 }

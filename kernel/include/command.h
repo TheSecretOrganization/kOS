@@ -1,4 +1,4 @@
 #pragma once
 
-void cmd_handle(char *command);
+void cmd_handle(const char *command);
 void cmd_ping();
