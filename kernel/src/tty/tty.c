@@ -107,8 +107,7 @@ void tty_print_prompt() { tty_putstr(TTY_PROMPT); }
 
 static void build_command(char* buf) {
 	size_t prompt_len = strlen(TTY_PROMPT);
-	const uint16_t* command =
-		&vga_buf[curr_tty->row * VGA_WIDTH + prompt_len];
+	const uint16_t* command = &vga_buf[curr_tty->row * VGA_WIDTH + prompt_len];
 	for (size_t i = 0; i < curr_tty->column - prompt_len; i++)
 		buf[i] = vga_get_char(command[i]);
 }
