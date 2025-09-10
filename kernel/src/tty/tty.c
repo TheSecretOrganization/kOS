@@ -77,7 +77,7 @@ void tty_clear() {
 }
 
 void tty_backspace() {
-	if (curr_tty->column <= strlen(TTY_PROMPT)) {
+	if (curr_tty->column < strlen(TTY_PROMPT)) {
 		return;
 	} else {
 		curr_tty->column--;
@@ -106,10 +106,11 @@ void tty_change_screen(size_t screen_number) {
 void tty_print_prompt() { tty_putstr(TTY_PROMPT); }
 
 static void build_command(char* buf) {
-	const char* command =
-		(char*)&vga_buf[curr_tty->row * VGA_WIDTH + strlen(TTY_PROMPT)];
-	for (size_t i = 0; i < curr_tty->column - strlen(TTY_PROMPT); i++)
-		buf[i] = command[i * 2];
+	size_t prompt_len = strlen(TTY_PROMPT);
+	const uint16_t* command =
+		&vga_buf[curr_tty->row * VGA_WIDTH + prompt_len];
+	for (size_t i = 0; i < curr_tty->column - prompt_len; i++)
+		buf[i] = vga_get_char(command[i]);
 }
 
 void tty_handle_entry(char c) {
