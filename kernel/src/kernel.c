@@ -17,4 +17,5 @@ void kernel_main() {
 	tty_set_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
 	printf("%d\n%s\n", 42, "Hello World!");
 	tty_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	tty_print_prompt();
 }

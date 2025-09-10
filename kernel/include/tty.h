@@ -70,3 +70,5 @@ void tty_clear();
 void tty_backspace();
 void tty_move_cursor(size_t x, size_t y);
 void tty_change_screen(size_t screen_number);
+void tty_print_prompt();
+void tty_handle_entry(char c);
