@@ -1,8 +1,8 @@
 #include "isr.h"
 #include "io.h"
+#include "keyboard.h"
 #include "pic.h"
 #include "tty.h"
-#include "keyboard.h"
 #include <stdbool.h>
 #include <stdint.h>
 

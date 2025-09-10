@@ -103,12 +103,11 @@ void tty_change_screen(size_t screen_number) {
 	tty_move_cursor(curr_tty->column, curr_tty->row);
 }
 
-void tty_print_prompt() {
-	tty_putstr(TTY_PROMPT);
-}
+void tty_print_prompt() { tty_putstr(TTY_PROMPT); }
 
-static void build_command(char *buf) {
-	const char *command = (char *) &vga_buf[curr_tty->row * VGA_WIDTH + strlen(TTY_PROMPT)];
+static void build_command(char* buf) {
+	const char* command =
+		(char*)&vga_buf[curr_tty->row * VGA_WIDTH + strlen(TTY_PROMPT)];
 	for (size_t i = 0; i < curr_tty->column - strlen(TTY_PROMPT); i++)
 		buf[i] = command[i * 2];
 }
