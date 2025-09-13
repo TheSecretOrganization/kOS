@@ -1,4 +1,5 @@
 #include "frame.h"
+#include "kpanic.h"
 #include "paging.h"
 #include <stdbool.h>
 #include <stddef.h>
@@ -27,17 +28,16 @@ static uint32_t find_free_frame(void) {
 				return i * 32 + bit;
 		}
 	}
-	return FRAME_ALLOC_ERROR;
+	KPANIC("Frame alloc error")
 }
 
 uint32_t alloc_frame(void) {
 	uint32_t frame_num = find_free_frame();
-	if (frame_num == FRAME_ALLOC_ERROR)
-		return FRAME_ALLOC_ERROR;
-
 	set_frame_used(frame_num);
+
 	uint32_t frame = START_FRAME + (frame_num * PAGE_SIZE);
 	memset((void*)frame, 0, PAGE_SIZE);
+
 	return frame;
 }
 
