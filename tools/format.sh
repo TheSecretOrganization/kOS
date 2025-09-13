@@ -2,38 +2,60 @@
 
 set -e
 
-CLANG_FORMAT="$(command -v clang-format)"
+NAME="clang-format"
 V_REQUIRED="20.1.8"
+PACKAGE="$NAME==$V_REQUIRED"
+CLANG_FORMAT_CMD="$(command -v $NAME)"
+PIPX_RUN_CMD="pipx run $PACKAGE"
 
-check_pipx_install() {
-    if command -v pipx >/dev/null 2>&1; then
-        echo "pipx is installed and will install clang-format==$V_REQUIRED!"
-        CLANG_FORMAT="pipx run clang-format==$V_REQUIRED"
-    else
-        echo "pipx is not installed, please install clang-format==$V_REQUIRED directly or install pipx and try again."
-        exit 1
-    fi
+usage() {
+    printf "%s:
+\t--help\tprints this message.
+\t--install\tinstalls %s with pipx if possible.
+\tAnything else will be passed as argurments to %s.
+" "$0" "$NAME" "$NAME"
 }
 
-check_installed_version() {
-    V_INSTALLED="$(clang-format --version 2>&1 | grep -oE '[0-9]+(\.[0-9]+)+')"
-    [[ -z "${V_INSTALLED}" ]] && return 1
+install() {
+    if ! command -v pipx >/dev/null 2>&1; then
+        echo "pipx is not installed, please install pipx and try again."
+        exit 1
+    fi
 
-    echo "clang-format installation detected! Checking version..."
+    pipx install $PACKAGE
+}
+
+check_version() {
+    V_INSTALLED="$($NAME --version 2>&1 | grep -oE '[0-9]+(\.[0-9]+)+')"
+    if [[ -z "${V_INSTALLED}" ]]; then
+        echo "A error occured, please try again later."
+        exit 1
+    fi
 
     if [ "$(printf '%s\n' "$V_INSTALLED" "$V_REQUIRED" | sort -V | tail -n1)" = "$V_INSTALLED" ]; then
         echo "Installed version: $V_INSTALLED >= required version: $V_REQUIRED, all good!"
     else
         echo "Installed version: $V_INSTALLED < required version: $V_REQUIRED :("
-        check_pipx_install
+        install
+        CLANG_FORMAT_CMD="$PIPX_RUN_CMD"
     fi
 }
 
-if [[ -z "${CLANG_FORMAT}" ]]; then
-    check_pipx_install
-else
-    check_installed_version
+if [[ "$1" == "--help" ]]; then
+    usage
+    exit 0
+elif [[ "$1" == "--install" ]]; then
+    install
+    exit 0
 fi
 
-echo "Executing formatter: '$CLANG_FORMAT', bye!"
-exec $CLANG_FORMAT "$@"
+if [[ -z "${CLANG_FORMAT_CMD}" ]]; then
+    echo "$NAME not installed, installing with pipx..."
+    install
+else
+    echo "$NAME already installed, checking the version..."
+    check_version
+fi
+
+echo "Executing command: '$CLANG_FORMAT_CMD', bye!"
+exec $CLANG_FORMAT_CMD "$@"
