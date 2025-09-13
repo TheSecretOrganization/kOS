@@ -14,7 +14,7 @@ body:
       label: Stack-trace
       description: If possible, to trace it down!
   - type: textarea
-    id: additionnals
+    id: additional
     attributes:
-      label: Additional informations
+      label: Additional information
       description: Screenshots, expected behavior, ...
