@@ -3,7 +3,7 @@ include config.mk
 ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
-DEBUG_SH	:= debug.sh
+DEBUG_SH	:= $(TOOLS_DIR)/debug.sh
 BREAKPOINT	?=
 
 .PHONY: all compile clean re check-format format debug
