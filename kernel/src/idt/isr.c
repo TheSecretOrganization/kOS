@@ -1,5 +1,6 @@
 #include "isr.h"
 #include "io.h"
+#include "keyboard.h"
 #include "pic.h"
 #include "tty.h"
 #include <stdbool.h>
@@ -52,9 +53,6 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 		char c = keymap_qwerty[keycode];
 
 		switch (keycode) {
-		case KC_ENTER:
-			tty_putchar('\n');
-			break;
 		case KC_LSHIFT:
 		case KC_RSHIFT:
 			shift = true;
@@ -66,6 +64,11 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 			tty_backspace();
 			break;
 		default:
+			if (keycode == KC_ENTER) {
+				tty_handle_entry(KC_ENTER);
+				break;
+			}
+
 			if (c == 0)
 				break;
 			if (alt) {
@@ -73,9 +76,9 @@ isr_keyboard_handler(__attribute__((unused)) struct interrupt_frame* frame) {
 				if (is_valid_tty(alt_n))
 					tty_change_screen(alt_n);
 			} else if (shift)
-				tty_putchar(keymap_qwerty_shift[keycode]);
+				tty_handle_entry(keymap_qwerty_shift[keycode]);
 			else
-				tty_putchar(keymap_qwerty[keycode]);
+				tty_handle_entry(keymap_qwerty[keycode]);
 			break;
 		}
 	}
