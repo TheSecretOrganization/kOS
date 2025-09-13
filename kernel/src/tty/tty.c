@@ -77,7 +77,7 @@ void tty_clear() {
 }
 
 void tty_backspace() {
-	if (curr_tty->column < strlen(TTY_PROMPT)) {
+	if (curr_tty->column <= strlen(TTY_PROMPT)) {
 		return;
 	} else {
 		curr_tty->column--;
@@ -122,5 +122,7 @@ void tty_handle_entry(char c) {
 		return;
 	}
 
+	if (curr_tty->column + 1 >= VGA_WIDTH)
+		return;
 	tty_putchar(c);
 }
