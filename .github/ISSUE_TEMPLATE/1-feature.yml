@@ -1,0 +1,16 @@
+name: Feature
+description: Describe a new feature
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: The most precise, the better!
+    validations:
+      required: true
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation
+      description: Provide some documentation on the subject
+      placeholder: "Title: link"
