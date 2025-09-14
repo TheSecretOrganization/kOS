@@ -30,8 +30,5 @@ jobs:
           mkdir -p ${{ github.workspace }}/bin
           PIPX_BIN_DIR=${{ github.workspace }}/bin ./tools/format.sh --install
 
-      - name: Add Formatter to Path
-        run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
-
       - name: Make
-        run: make check-format
+        run: PIPX_BIN_DIR=${{ github.workspace }}/bin make check-format
