@@ -1,7 +1,7 @@
 #include "isr.h"
 #include "io.h"
-#include "kpanic.h"
 #include "keyboard.h"
+#include "kpanic.h"
 #include "pic.h"
 #include "tty.h"
 #include <stdbool.h>
