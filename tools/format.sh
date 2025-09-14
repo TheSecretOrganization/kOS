@@ -10,8 +10,9 @@ PIPX_RUN_CMD="pipx run $PACKAGE"
 
 usage() {
     printf "%s:
-\t--help\tprints this message.
-\t--install\tinstalls %s with pipx if possible.
+\t--help                  \tprints this message.
+\t--install               \tinstalls %s with pipx if possible.
+\t--override </path/to/bin>\tallows to use an arbitrary binary and bypass the validation.
 \tAnything else will be passed as argurments to %s.
 " "$0" "$NAME" "$NAME"
 }
@@ -49,7 +50,11 @@ elif [[ "$1" == "--install" ]]; then
     exit 0
 fi
 
-if [[ -z "${CLANG_FORMAT_CMD}" ]]; then
+if [[ "$1" == "--override" ]] && [[ ! -z "${2}" ]]; then
+    echo "Overriding checks with: $2"
+    CLANG_FORMAT_CMD="$2"
+    shift 2
+elif [[ -z "${CLANG_FORMAT_CMD}" ]]; then
     echo "$NAME not installed, installing with pipx..."
     install
 else

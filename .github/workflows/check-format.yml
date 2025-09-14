@@ -14,21 +14,27 @@ jobs:
   check-format:
     runs-on: ubuntu-latest
 
+    env:
+      CACHE_DIR: ${{ github.workspace }}/clang-format
+      PIPX_HOME: ${{ github.workspace }}/clang-format/pipx
+      PIPX_BIN_DIR: ${{ github.workspace }}/clang-format/bin
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Cache Formatter
         uses: actions/cache@v4
-        id: clang-format-cache
+        id: formatter-cache
         with:
           key: clang-format-${{ runner.os }}
-          path: ${{ github.workspace }}/bin
+          path: ${{ env.CACHE_DIR }}
 
       - name: Install Formatter
-        if: ${{ steps.clang-format-cache.outputs.cache-hit != 'true' }}
+        if: ${{ steps.formatter-cache.outputs.cache-hit != 'true' }}
         run: |
-          mkdir -p ${{ github.workspace }}/bin
-          PIPX_BIN_DIR=${{ github.workspace }}/bin ./tools/format.sh --install
+          mkdir -p ${{ env.PIPX_HOME }} ${{ env.PIPX_BIN_DIR }}
+          ./tools/format.sh --install
 
       - name: Make
-        run: PIPX_BIN_DIR=${{ github.workspace }}/bin make check-format
+        run: |
+          make check-format ARGS="--override ${{ env.PIPX_BIN_DIR }}/clang-format"

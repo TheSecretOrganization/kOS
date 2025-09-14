@@ -1,6 +1,7 @@
 #include "isr.h"
 #include "io.h"
 #include "keyboard.h"
+#include "kpanic.h"
 #include "pic.h"
 #include "tty.h"
 #include <stdbool.h>
@@ -27,11 +28,7 @@ bool alt = false;
 
 __attribute__((interrupt)) void
 isr_exception_handler(__attribute__((unused)) struct interrupt_frame* frame) {
-	tty_set_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
-	tty_clear();
-	tty_putstr("Exception occurred\n");
-	tty_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	asm volatile("cli; hlt");
+	KPANIC("Exception occurred")
 }
 
 __attribute__((interrupt)) void
