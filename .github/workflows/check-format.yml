@@ -5,9 +5,9 @@ permissions:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -15,10 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install clang-format
-      run: sudo apt-get update && sudo apt-get install clang-format
+      - name: Cache Formatter
+        uses: actions/cache@v4
+        id: clang-format-cache
+        with:
+          key: clang-format-${{ runner.os }}
+          path: ${{ github.workspace }}/bin
 
-    - name: Make
-      run: make check-format
+      - name: Install Formatter
+        if: ${{ steps.clang-format-cache.outputs.cache-hit != 'true' }}
+        run: |
+          mkdir -p ${{ github.workspace }}/bin
+          PIPX_BIN_DIR=${{ github.workspace }}/bin ./tools/format.sh --install
+
+      - name: Add Formatter to Path
+        run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+
+      - name: Make
+        run: make check-format

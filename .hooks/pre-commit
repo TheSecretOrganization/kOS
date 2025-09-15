@@ -4,8 +4,7 @@
 changed_files=$(git diff --cached --name-only -- '*.c' '*.h')
 
 if [ -n "$changed_files" ]; then
-  echo "* Formatting changed files"
-  clang-format -i $changed_files
-  git add $changed_files
+    echo "* Formatting changed files"
+    make format
+    git add $changed_files
 fi
-

@@ -3,7 +3,8 @@ include config.mk
 ALL_SRC		:= $(shell find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.c" -o -name "*.cpp" \))
 NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
-DEBUG_SH	:= debug.sh
+DEBUG_SH	:= $(TOOLS_DIR)/debug.sh
+FORMAT_SH	:= $(TOOLS_DIR)/format.sh
 BREAKPOINT	?=
 
 .PHONY: all compile clean re check-format format debug
@@ -32,11 +33,11 @@ re: clean
 run: all
 	qemu-system-i386 -cdrom $(NAME_ISO) -no-reboot
 
-check-format:
-	@clang-format --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
+check-format: $(FORMAT_SH)
+	@$(FORMAT_SH) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
 
-format:
-	@clang-format -i $(ALL_SRC)
+format: $(FORMAT_SH)
+	@$(FORMAT_SH) -i $(ALL_SRC)
 
 debug: $(DEBUG_SH) $(NAME_BIN)
 	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)

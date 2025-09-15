@@ -1,20 +1,17 @@
 #include "tty.h"
+#include "command.h"
 #include "io.h"
+#include "keyboard.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
+
+#define TTY_PROMPT ">"
 
 static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
 static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
-
-static inline unsigned char get_char(size_t x, size_t y) {
-	return vga_get_char(vga_buf[y * VGA_WIDTH + x]);
-}
-
-static inline unsigned char get_current_char() {
-	return get_char(curr_tty->column, curr_tty->row);
-}
 
 static void putendl(size_t y) {
 	for (size_t x = 0; x < VGA_WIDTH; x++)
@@ -80,14 +77,8 @@ void tty_clear() {
 }
 
 void tty_backspace() {
-	if (curr_tty->column == 0) {
-		if (curr_tty->row == 0)
-			return;
-		curr_tty->column = VGA_WIDTH - 1;
-		curr_tty->row--;
-		while (curr_tty->column != 0 && get_current_char() == ' ' &&
-			   get_char(curr_tty->column - 1, curr_tty->row) == ' ')
-			curr_tty->column--;
+	if (curr_tty->column <= strlen(TTY_PROMPT)) {
+		return;
 	} else {
 		curr_tty->column--;
 	}
@@ -110,4 +101,28 @@ void tty_change_screen(size_t screen_number) {
 	curr_tty = &ttys[screen_number - 1];
 	memcpy(vga_buf, curr_tty->buf, VGA_BUFFER_SIZE);
 	tty_move_cursor(curr_tty->column, curr_tty->row);
+}
+
+void tty_print_prompt() { tty_putstr(TTY_PROMPT); }
+
+static void build_command(char* buf) {
+	size_t prompt_len = strlen(TTY_PROMPT);
+	const uint16_t* command = &vga_buf[curr_tty->row * VGA_WIDTH + prompt_len];
+	for (size_t i = 0; i < curr_tty->column - prompt_len; i++)
+		buf[i] = vga_get_char(command[i]);
+}
+
+void tty_handle_entry(char c) {
+	if (c == KC_ENTER) {
+		char buf[VGA_WIDTH] = {0};
+		build_command(buf);
+		tty_putchar('\n');
+		cmd_handle(buf);
+		tty_print_prompt();
+		return;
+	}
+
+	if (curr_tty->column + 1 >= VGA_WIDTH)
+		return;
+	tty_putchar(c);
 }

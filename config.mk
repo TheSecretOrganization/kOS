@@ -10,6 +10,7 @@ KERNEL_DIR			= kernel
 LIBK_DIR			= libk
 LIBK				= libk.a
 GRUB_CFG			= grub.cfg
+TOOLS_DIR			= tools
 
 OS					= $(shell uname -s)
 ifeq ($(OS),Darwin)

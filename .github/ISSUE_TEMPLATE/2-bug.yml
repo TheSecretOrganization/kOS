@@ -1,0 +1,20 @@
+name: Bug
+description: Describe a bug :o
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: The most precise, the better!
+    validations:
+      required: true
+  - type: textarea
+    id: stack-trace
+    attributes:
+      label: Stack-trace
+      description: If possible, to trace it down!
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional information
+      description: Screenshots, expected behavior, ...
