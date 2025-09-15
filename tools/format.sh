@@ -13,7 +13,7 @@ usage() {
 \t--help                  \tprints this message.
 \t--install               \tinstalls %s with pipx if possible.
 \t--override </path/to/bin>\tallows to use an arbitrary binary and bypass the validation.
-\tAnything else will be passed as argurments to %s.
+\tAnything else will be passed as arguments to %s.
 " "$0" "$NAME" "$NAME"
 }
 
