@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: awalsh128/cache-apt-pkgs-action@v1.5.3
+      - uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
         with:
           packages: grub-common grub-pc-bin xorriso mtools nasm wget
           version: 1.0
