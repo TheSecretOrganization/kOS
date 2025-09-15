@@ -34,10 +34,10 @@ run: all
 	qemu-system-i386 -cdrom $(NAME_ISO) -no-reboot
 
 check-format: $(FORMAT_SH)
-	@$(FORMAT_SH) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
+	@$(FORMAT_SH) $(ARGS) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
 
 format: $(FORMAT_SH)
-	@$(FORMAT_SH) -i $(ALL_SRC)
+	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
 debug: $(DEBUG_SH) $(NAME_BIN)
 	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)
