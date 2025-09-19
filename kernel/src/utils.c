@@ -2,6 +2,9 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#define MAX_STACK_LINES 1
+#define MAX_TRACE_LINES 9
+
 void print_stack_trace() {
 	unsigned int* ebp;
 	asm volatile("movl %%ebp, %0" : "=r"(ebp));
@@ -12,8 +15,8 @@ void print_stack_trace() {
 
 	printf("esp: %p ebp: %p frame size: %d\n\n", ebp + 2, *ebp, top - ebp);
 
-	size_t i = 0;
-	while (bot != top) {
+	size_t i = 0, lines = 0;
+	while (bot != top && lines <= MAX_STACK_LINES) {
 		if (i == 0)
 			printf("%p: ", bot);
 		printf("%x ", *bot);
@@ -23,12 +26,14 @@ void print_stack_trace() {
 		if (i == 4 && bot != top) {
 			printf("\n");
 			i = 0;
+			lines++;
 		}
 	}
 
 	ebp = (unsigned int*)*ebp;
 	printf("\n\n--- STACK TRACE ---\n");
-	while (ebp) {
+	lines = 0;
+	while (ebp && lines <= MAX_TRACE_LINES) {
 		printf("return address: %p\n", *(ebp + 1));
 		ebp = (unsigned int*)*ebp;
 	}
