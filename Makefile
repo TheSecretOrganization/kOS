@@ -5,12 +5,10 @@ NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
 DEBUG_SH	:= $(TOOLS_DIR)/debug.sh
 FORMAT_SH	:= $(TOOLS_DIR)/format.sh
-BREAKPOINT	?=
 
-.PHONY: all compile clean re check-format format debug
+.PHONY: all clean re check-format format debug
 
-all: compile
-	make $(NAME_ISO)
+all: $(NAME_ISO)
 
 $(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
@@ -18,7 +16,7 @@ $(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
 	$(GRUB_MKRESCUE) -o $(NAME_ISO) $(ISO_DIR)
 
-compile:
+$(NAME_BIN):
 	make -C $(LIBK_DIR) all
 	make -C $(KERNEL_DIR) all
 
@@ -39,5 +37,6 @@ check-format: $(FORMAT_SH)
 format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
-debug: $(DEBUG_SH) $(NAME_BIN)
-	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)
+debug: $(DEBUG_SH)
+	DEBUG=1 make all
+	@./$(DEBUG_SH) $(NAME_BIN) $(ARGS)
