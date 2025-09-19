@@ -2,7 +2,6 @@
 #include "command.h"
 #include "io.h"
 #include "keyboard.h"
-#include "kpanic.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
