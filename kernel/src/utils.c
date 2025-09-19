@@ -11,11 +11,12 @@ void print_stack_trace() {
 
 	printf("--- STACK ---\n");
 	unsigned int* bot = ebp + 2;
-	unsigned int* top = (unsigned int*)*ebp;
+	const unsigned int* top = (unsigned int*)*ebp;
 
 	printf("esp: %p ebp: %p frame size: %d\n\n", ebp + 2, *ebp, top - ebp);
 
-	size_t i = 0, lines = 0;
+	size_t i = 0;
+	size_t lines = 0;
 	while (bot != top && lines <= MAX_STACK_LINES) {
 		if (i == 0)
 			printf("%p: ", bot);
