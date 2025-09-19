@@ -2,6 +2,7 @@
 #include "command.h"
 #include "io.h"
 #include "keyboard.h"
+#include "kpanic.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -113,6 +114,7 @@ static void build_command(char* buf) {
 }
 
 void tty_handle_entry(char c) {
+	KPANIC("test");
 	if (c == KC_ENTER) {
 		char buf[VGA_WIDTH] = {0};
 		build_command(buf);
