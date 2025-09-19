@@ -37,6 +37,5 @@ check-format: $(FORMAT_SH)
 format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
-debug: $(DEBUG_SH)
-	DEBUG=1 make all
-	@./$(DEBUG_SH) $(NAME_BIN) $(ARGS)
+debug: $(DEBUG_SH) $(NAME_BIN) 
+	@./$(DEBUG_SH) $(ARGS)
