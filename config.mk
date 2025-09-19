@@ -31,7 +31,7 @@ AFLAGS				= -f elf32
 
 MANDATORY_CFLAGS	= -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
 CFLAGS_COMMON		= -std=gnu11 -ffreestanding -Wall -Wextra -Wshadow -mno-sse -mno-mmx -mno-80387 -O0 -g
-CFLAGS				= $(CFLAGS_COMMON) $(CFLAGS_DEBUG) $(MANDATORY_CFLAGS)
+CFLAGS				= $(CFLAGS_COMMON) $(MANDATORY_CFLAGS)
 
 CPPFLAGS_COMMON		=
 MANDATORY_CPPFLAGS	= -fno-exceptions -fno-rtti
