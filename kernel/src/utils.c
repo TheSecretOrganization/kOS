@@ -1,17 +1,18 @@
 #include "utils.h"
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #define MAX_STACK_LINES 1
 #define MAX_TRACE_LINES 9
 
 void print_stack_trace() {
-	unsigned int* ebp;
+	uint32_t* ebp;
 	asm volatile("movl %%ebp, %0" : "=r"(ebp));
 
 	printf("--- STACK ---\n");
-	unsigned int* bot = ebp + 2;
-	const unsigned int* top = (unsigned int*)*ebp;
+	uint32_t* bot = ebp + 2;
+	const uint32_t* top = (uint32_t*)*ebp;
 
 	printf("esp: %p ebp: %p frame size: %d\n\n", ebp + 2, *ebp, top - ebp);
 
@@ -31,12 +32,12 @@ void print_stack_trace() {
 		}
 	}
 
-	ebp = (unsigned int*)*ebp;
+	ebp = (uint32_t*)*ebp;
 	printf("\n\n--- STACK TRACE ---\n");
 	lines = 0;
 	while (ebp && lines <= MAX_TRACE_LINES) {
 		printf("return address: %p\n", *(ebp + 1));
 		lines++;
-		ebp = (unsigned int*)*ebp;
+		ebp = (uint32_t*)*ebp;
 	}
 }
