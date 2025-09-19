@@ -6,17 +6,17 @@ LIBK		:= $(LIBK_DIR)/$(LIBK)
 DEBUG_SH	:= $(TOOLS_DIR)/debug.sh
 FORMAT_SH	:= $(TOOLS_DIR)/format.sh
 
-.PHONY: all clean re check-format format debug
+.PHONY: all compile clean re check-format format debug
 
 all: $(NAME_ISO)
 
-$(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
+$(NAME_ISO): $(GRUB_CFG) compile $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
 	cp $(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
 	$(GRUB_MKRESCUE) -o $(NAME_ISO) $(ISO_DIR)
 
-$(NAME_BIN):
+compile:
 	make -C $(LIBK_DIR) all
 	make -C $(KERNEL_DIR) all
 
@@ -37,5 +37,5 @@ check-format: $(FORMAT_SH)
 format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
-debug: $(DEBUG_SH) $(NAME_BIN) 
+debug: $(DEBUG_SH) compile 
 	@./$(DEBUG_SH) $(ARGS)
