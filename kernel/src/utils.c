@@ -36,6 +36,7 @@ void print_stack_trace() {
 	lines = 0;
 	while (ebp && lines <= MAX_TRACE_LINES) {
 		printf("return address: %p\n", *(ebp + 1));
+		lines++;
 		ebp = (unsigned int*)*ebp;
 	}
 }
