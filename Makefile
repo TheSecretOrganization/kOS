@@ -37,5 +37,5 @@ check-format: $(FORMAT_SH)
 format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
-debug: $(DEBUG_SH) compile 
+debug: $(DEBUG_SH) compile
 	@./$(DEBUG_SH) $(ARGS)
