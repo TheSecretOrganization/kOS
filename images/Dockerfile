@@ -10,7 +10,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache curl=8.14.1-r1 \
     && mkdir -p /kos_cross/bin \
-    && curl -fsSL https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz \
+    && curl -fsSL --proto =https --proto-redir =https https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz \
     | tar -xJ --strip-components=1 -C /kos_cross
 
 RUN apk add --no-cache pipx=1.7.1-r0 \
