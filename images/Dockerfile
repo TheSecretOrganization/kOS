@@ -18,7 +18,9 @@ RUN apk add --no-cache pipx=1.7.1-r0 \
     && pipx install clang-format==20.1.8
 
 RUN apk add --no-cache \
+    bash=5.2.37-r0 \
+    gcompat=1.1.0-r4 \
     make=4.4.1-r3 \
     nasm=2.16.03-r0
 
-ENTRYPOINT [ "/bin/ash" ]
+ENTRYPOINT [ "/bin/bash" ]
