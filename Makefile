@@ -29,7 +29,7 @@ re: clean
 	make all
 
 run: all
-	qemu-system-i386 -cdrom $(NAME_ISO) -no-reboot
+	qemu-system-i386 -cdrom $(NAME_ISO)
 
 check-format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
