@@ -5,14 +5,12 @@ NAME_BIN	:= $(KERNEL_DIR)/$(NAME_BIN)
 LIBK		:= $(LIBK_DIR)/$(LIBK)
 DEBUG_SH	:= $(TOOLS_DIR)/debug.sh
 FORMAT_SH	:= $(TOOLS_DIR)/format.sh
-BREAKPOINT	?=
 
 .PHONY: all compile clean re check-format format debug
 
-all: compile
-	make $(NAME_ISO)
+all: $(NAME_ISO)
 
-$(NAME_ISO): $(GRUB_CFG) $(NAME_BIN) $(LIBK)
+$(NAME_ISO): $(GRUB_CFG) compile $(LIBK)
 	mkdir -pv $(ISO_DIR)/boot/grub
 	cp $(NAME_BIN) $(ISO_DIR)/boot
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub
@@ -31,13 +29,13 @@ re: clean
 	make all
 
 run: all
-	qemu-system-i386 -cdrom $(NAME_ISO) -no-reboot
+	qemu-system-i386 -cdrom $(NAME_ISO)
 
 check-format: $(FORMAT_SH)
-	@$(FORMAT_SH) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
+	@$(FORMAT_SH) $(ARGS) --dry-run --Werror $(ALL_SRC) || (echo "Formatting issues detected! Run 'make format' to fix." && exit 1)
 
 format: $(FORMAT_SH)
-	@$(FORMAT_SH) -i $(ALL_SRC)
+	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
-debug: $(DEBUG_SH) $(NAME_BIN)
-	@./$(DEBUG_SH) $(NAME_BIN) $(BREAKPOINT)
+debug: $(DEBUG_SH) compile
+	@./$(DEBUG_SH) $(ARGS)

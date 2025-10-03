@@ -5,38 +5,43 @@ permissions:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
   compile:
     runs-on: ubuntu-latest
 
+    env:
+      CACHE_DIR: ${{ github.workspace }}/kos_cross
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y grub-common grub-pc-bin xorriso mtools nasm wget
+      - uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
+        with:
+          packages: grub-common grub-pc-bin xorriso mtools nasm wget
+          version: 1.0
 
-    - name: Cache Cross-Compiler
-      uses: actions/cache@v4
-      id: compiler-cache
-      with:
-        key: cc-386-elf-7.5.0-Linux-x86_64
-        path: kos_cross
+      - name: Cache Cross-Compiler
+        uses: actions/cache@v4
+        id: compiler-cache
+        with:
+          key: cc-386-elf-7.5.0-Linux-x86_64
+          path: ${{ env.CACHE_DIR }}
 
-    - name: Install Cross-Compiler
-      if: ${{ steps.compiler-cache.outputs.cache-hit != 'true' }}
-      run: |
-        wget -q https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
-        tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
-        rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
-        mv i386-elf-7.5.0-Linux-x86_64 kos_cross
+      - name: Install Cross-Compiler
+        if: ${{ steps.compiler-cache.outputs.cache-hit != 'true' }}
+        run: |
+          wget -q https://newos.org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz
+          tar -xf i386-elf-7.5.0-Linux-x86_64.tar.xz
+          rm -rf i386-elf-7.5.0-Linux-x86_64.tar.xz
+          mv i386-elf-7.5.0-Linux-x86_64 ${{ env.CACHE_DIR }}
 
-    - name: Add Cross-Compiler to Path
-      run: echo "${{ github.workspace }}/kos_cross/bin" >> $GITHUB_PATH
+      - name: Add Cross-Compiler to Path
+        run: echo "${{ env.CACHE_DIR }}/bin" >> $GITHUB_PATH
 
-    - name: Make
-      run: make
+      - name: Make
+        run: make
