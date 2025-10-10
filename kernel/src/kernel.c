@@ -23,7 +23,7 @@ static uint64_t detect_memory(const multiboot_info_t* mbd, uint32_t magic) {
 
 	for (size_t i = 0; i < mbd->mmap_length;
 		 i += sizeof(multiboot_memory_map_t)) {
-		multiboot_memory_map_t* mmmt =
+		const multiboot_memory_map_t* mmmt =
 			(multiboot_memory_map_t*)(mbd->mmap_addr + i);
 
 		uint64_t len = ((uint64_t)mmmt->len_high << 32) | mmmt->len_low;
@@ -40,7 +40,7 @@ static uint64_t detect_memory(const multiboot_info_t* mbd, uint32_t magic) {
 	return total_mem;
 }
 
-void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
+void kernel_main(const multiboot_info_t* mbd, uint32_t magic) {
 	tty_init();
 
 	uint64_t total_mem = detect_memory(mbd, magic);
