@@ -1,6 +1,6 @@
 #include "pmm.h"
 #include "kpanic.h"
-#include "paging.h"
+#include "memory.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
