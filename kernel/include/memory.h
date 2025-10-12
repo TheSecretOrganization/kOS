@@ -1,9 +1,7 @@
 #pragma once
 
+#include "multiboot.h"
 #include <stdint.h>
-
-extern uint32_t _kernel_start;
-extern uint32_t _kernel_end;
 
 #define ENTRIES_PER_TABLE 1024u
 #define PAGE_SIZE 0x1000u
@@ -18,4 +16,5 @@ extern uint32_t _kernel_end;
 #define PAGE_4MB 0x80
 #define PAGE_GLOBAL 0x100
 
-void paging_setup();
+void paging_init();
+uint64_t detect_memory(const multiboot_info_t* mbd, uint32_t magic);
