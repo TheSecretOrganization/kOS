@@ -5,8 +5,7 @@
 #include <tty.h>
 
 #define CLEAN_REGISTERS()                                                      \
-	asm volatile(                                                              \
-		"xor %eax, %eax; xor %ebx, %ebx; xor %ecx, %ecx; xor %edx, %edx");
+	asm volatile("xor eax, eax; xor ebx, ebx; xor ecx, ecx; xor edx, edx");
 
 #define KPANIC(s)                                                              \
 	tty_set_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);                      \

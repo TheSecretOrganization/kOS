@@ -5,16 +5,16 @@
 #define IO_KEYBOARD_DATA 0x60
 
 static inline void outb(uint16_t port, uint8_t val) {
-	__asm__ volatile("outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
+	__asm__ volatile("out dx, al" : : "a"(val), "d"(port) : "memory");
 }
 
 static inline void outw(uint16_t port, uint16_t val) {
-	__asm__ volatile("outw %w0, %w1" : : "a"(val), "Nd"(port) : "memory");
+	__asm__ volatile("out dx, ax" : : "a"(val), "d"(port) : "memory");
 }
 
 static inline uint8_t inb(uint16_t port) {
 	uint8_t ret;
-	__asm__ volatile("inb %w1, %b0" : "=a"(ret) : "Nd"(port) : "memory");
+	__asm__ volatile("in al, dx" : "=a"(ret) : "d"(port) : "memory");
 	return ret;
 }
 
