@@ -8,7 +8,7 @@
 
 void print_stack_trace() {
 	uint32_t* ebp;
-	asm volatile("movl %%ebp, %0" : "=r"(ebp));
+	asm volatile("mov %0, ebp" : "=r"(ebp));
 
 	printf("--- STACK ---\n");
 	uint32_t* bot = ebp + 2;
