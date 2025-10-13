@@ -9,7 +9,10 @@ dd FLAGS
 dd CHECKSUM
 
 section .bss
-align 16
+	align 16
+	global stack_bottom
+	global stack_top
+
 stack_bottom:
 	resb 16384
 stack_top:
