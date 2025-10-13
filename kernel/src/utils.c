@@ -12,7 +12,7 @@ void print_stack_lines(uint32_t* start, const uint32_t* end, size_t n,
 	size_t i = 0;
 	size_t l = 0;
 
-	while (start != end && l < lines) {
+	while (start <= end && l < lines) {
 		if (i == 0)
 			printf("%p: ", start);
 		printf("%x ", *start);
