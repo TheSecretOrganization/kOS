@@ -7,7 +7,8 @@
 #define MAX_STACK_LINES 9
 #define MAX_TRACE_LINES 9
 
-void print_stack_lines(uint32_t* start, uint32_t* end, size_t n, size_t lines) {
+void print_stack_lines(uint32_t* start, const uint32_t* end, size_t n,
+					   size_t lines) {
 	size_t i = 0;
 	size_t l = 0;
 
