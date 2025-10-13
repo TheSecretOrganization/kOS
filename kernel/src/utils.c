@@ -30,7 +30,7 @@ void print_stack_lines(uint32_t* start, const uint32_t* end, size_t n,
 		printf("...\n");
 }
 
-void print_stack(uint32_t* start, uint32_t* end, size_t n) {
+void print_stack(uint32_t* start, const uint32_t* end, size_t n) {
 	print_stack_lines(start, end, n, VGA_HEIGHT - 2);
 }
 
