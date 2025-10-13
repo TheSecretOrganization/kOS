@@ -1,10 +1,14 @@
 #!/bin/bash
 
-#Format changed files
-changed_files=$(git diff --cached --name-only -- '*.c' '*.h')
+# Format changed files, ignoring deleted files
+changed_files=$(git diff --cached --name-only --diff-filter=ACM -- '*.c' '*.h')
 
 if [ -n "$changed_files" ]; then
     echo "* Formatting changed files"
     make format
-    git add $changed_files
+
+    # Add files safely, handling spaces and newlines
+    echo "$changed_files" | while IFS= read -r file; do
+        git add "$file"
+    done
 fi
