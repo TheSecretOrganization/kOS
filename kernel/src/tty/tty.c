@@ -101,9 +101,14 @@ void tty_change_screen(size_t screen_number) {
 	curr_tty = &ttys[screen_number - 1];
 	memcpy(vga_buf, curr_tty->buf, VGA_BUFFER_SIZE);
 	tty_move_cursor(curr_tty->column, curr_tty->row);
+	tty_print_prompt();
 }
 
-void tty_print_prompt() { tty_putstr(TTY_PROMPT); }
+void tty_print_prompt() {
+	if (curr_tty->column != 0)
+		return;
+	tty_putstr(TTY_PROMPT);
+}
 
 static void build_command(char* buf) {
 	size_t prompt_len = strlen(TTY_PROMPT);
