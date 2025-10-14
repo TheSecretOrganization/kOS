@@ -8,9 +8,12 @@ extern uintptr_t _kernel_end;
 
 #define KERNEL_VIRTUAL_BASE 0xC0000000
 
+#define RECURSIVE_INDEX 1023U
+#define RECURSIVE_PT_BASE ((uintptr_t)0xFFC00000)
+#define RECURSIVE_PD_ADDR ((pde_t*)0xFFFFF000)
 #define ENTRIES_PER_TABLE 1024u
-#define PAGE_SIZE 0x1000u
 
+#define PAGE_SIZE 0x1000u
 #define PAGE_PRESENT 0x1
 #define PAGE_RW 0x2
 #define PAGE_USER 0x4
