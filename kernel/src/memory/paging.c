@@ -87,7 +87,7 @@ void paging_init(void) {
 	page_directory = (pde_t*)pd_phys;
 	page_directory[RECURSIVE_INDEX] = pd_phys | PAGE_PRESENT | PAGE_RW;
 
-	uint32_t bitmap_end_addr = get_bitmap_end_addr();
+	uintptr_t bitmap_end_addr = get_bitmap_end_addr();
 	for (uintptr_t addr = 0; addr < bitmap_end_addr; addr += PAGE_SIZE) {
 		map_page(addr, addr, PAGE_PRESENT | PAGE_RW);
 	}
@@ -104,7 +104,7 @@ uintptr_t get_phys_addr(uintptr_t virt_addr) {
 		return 0;
 	}
 
-	pte_t* pt;
+	const pte_t* pt;
 	if (recursive_active()) {
 		pt = pt_virt_for_index(pd_idx);
 	} else {

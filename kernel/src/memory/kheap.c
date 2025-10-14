@@ -30,7 +30,7 @@ size_t ksize(const void* objp) {
 		return 0;
 	}
 
-	block_header_t* header = (block_header_t*)objp - 1;
+	const block_header_t* header = (const block_header_t*)objp - 1;
 
 	if (header->magic != BLOCK_MAGIC) {
 		return 0;
@@ -77,7 +77,7 @@ static block_header_t* kbrk(size_t increment) {
 
 static block_header_t* try_split_block(block_header_t* block, size_t new_size) {
 	if (!block || !new_size) {
-		return false;
+		return NULL;
 	}
 
 	size_t min_size = new_size + sizeof(block_header_t) + BLOCK_MINIMUM_SIZE;
