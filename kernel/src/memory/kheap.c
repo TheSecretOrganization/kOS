@@ -151,7 +151,7 @@ static block_header_t* coalesce_next(block_header_t* block) {
 	return block;
 }
 
-void kfree(const void* objp) {
+void kfree(void* objp) {
 	if (!objp) {
 		return;
 	}

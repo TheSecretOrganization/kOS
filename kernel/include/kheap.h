@@ -24,5 +24,5 @@ typedef struct {
 } heap_state_t;
 
 void* kmalloc(size_t size);
-void kfree(const void* objp);
+void kfree(void* objp);
 size_t ksize(const void* objp);
