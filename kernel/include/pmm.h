@@ -11,9 +11,7 @@ typedef struct {
 	uint32_t next_free_bit;
 } frame_map_t;
 
-typedef uint32_t pageframe_t;
-
-uint32_t get_bitmap_end_addr();
+uintptr_t get_bitmap_end_addr();
 void pmm_init(uint64_t total_mem);
-pageframe_t pmm_alloc_frame(void);
-void pmm_free_frame(pageframe_t frame);
+uintptr_t pmm_alloc_frame(void);
+void pmm_free_frame(uintptr_t frame);

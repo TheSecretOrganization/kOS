@@ -1,10 +1,11 @@
 #include "gdt.h"
 #include "idt.h"
-#include "memory.h"
 #include "multiboot.h"
+#include "paging.h"
 #include "pic.h"
 #include "pmm.h"
 #include "tty.h"
+#include "utils.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
