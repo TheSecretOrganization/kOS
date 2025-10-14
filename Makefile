@@ -38,4 +38,4 @@ format: $(FORMAT_SH)
 	@$(FORMAT_SH) $(ARGS) -i $(ALL_SRC)
 
 debug: $(DEBUG_SH) compile
-	@./$(DEBUG_SH) $(ARGS)
+	@./$(DEBUG_SH) $(NAME_BIN) $(ARGS)
