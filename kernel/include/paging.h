@@ -8,7 +8,7 @@ extern uintptr_t _kernel_end;
 
 #define KERNEL_VIRTUAL_BASE 0xC0000000
 
-#define RECURSIVE_INDEX 1023U
+#define RECURSIVE_INDEX 1023u
 #define RECURSIVE_PT_BASE ((uintptr_t)0xFFC00000)
 #define RECURSIVE_PD_ADDR ((pde_t*)0xFFFFF000)
 #define ENTRIES_PER_TABLE 1024u
