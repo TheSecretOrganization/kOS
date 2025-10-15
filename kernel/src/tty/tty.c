@@ -2,12 +2,11 @@
 #include "command.h"
 #include "io.h"
 #include "keyboard.h"
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
-#define TTY_PROMPT ">"
 
 static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
@@ -35,6 +34,8 @@ void tty_init() {
 		ttys[i].row = 0;
 		ttys[i].column = 0;
 		ttys[i].color = curr_tty->color;
+		ttys[i].id = i + 1;
+		ttys[i].input_start = 0;
 		memcpy(ttys[i].buf, vga_buf, VGA_BUFFER_SIZE);
 	}
 }
@@ -53,6 +54,7 @@ void tty_putchar(unsigned char c) {
 		tty_putchar_at(c, curr_tty->column, curr_tty->row);
 	if (++curr_tty->column == VGA_WIDTH || c == '\n') {
 		curr_tty->column = 0;
+		curr_tty->input_start = 0;
 		if (++curr_tty->row == VGA_HEIGHT) {
 			scroll();
 			curr_tty->row -= 1;
@@ -77,7 +79,7 @@ void tty_clear() {
 }
 
 void tty_backspace() {
-	if (curr_tty->column <= strlen(TTY_PROMPT)) {
+	if (curr_tty->column <= curr_tty->input_start) {
 		return;
 	} else {
 		curr_tty->column--;
@@ -107,22 +109,36 @@ void tty_change_screen(size_t screen_number) {
 void tty_print_prompt() {
 	if (curr_tty->column != 0)
 		return;
-	tty_putstr(TTY_PROMPT);
+
+	uint8_t fg = vga_get_color_fg(curr_tty->color);
+	uint8_t bg = vga_get_color_bg(curr_tty->color);
+
+	tty_set_color(VGA_COLOR_LIGHT_GREEN, bg);
+	printf("[%u] > ", curr_tty->id);
+	tty_set_color(fg, bg);
 }
 
-static void build_command(char* buf) {
-	size_t prompt_len = strlen(TTY_PROMPT);
-	const uint16_t* command = &vga_buf[curr_tty->row * VGA_WIDTH + prompt_len];
-	for (size_t i = 0; i < curr_tty->column - prompt_len; i++)
+static bool try_build_command(char* buf) {
+	if (curr_tty->column <= curr_tty->input_start)
+		return false;
+
+	const uint16_t* command =
+		&vga_buf[curr_tty->row * VGA_WIDTH + curr_tty->input_start];
+
+	for (size_t i = 0; i < curr_tty->column - curr_tty->input_start; i++)
 		buf[i] = vga_get_char(command[i]);
+
+	return true;
 }
 
 void tty_handle_entry(char c) {
 	if (c == KC_ENTER) {
 		char buf[VGA_WIDTH] = {0};
-		build_command(buf);
+		bool valid_command = try_build_command(buf);
 		tty_putchar('\n');
-		cmd_handle(buf);
+		if (valid_command)
+			cmd_handle(buf);
+
 		tty_print_prompt();
 		return;
 	}
