@@ -11,7 +11,6 @@
 static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
 static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
-static size_t prompt_len = 0;
 
 static void putendl(size_t y) {
 	for (size_t x = 0; x < VGA_WIDTH; x++)
@@ -115,8 +114,7 @@ void tty_print_prompt() {
 	uint8_t bg = vga_get_color_bg(curr_tty->color);
 
 	tty_set_color(VGA_COLOR_LIGHT_GREEN, bg);
-	prompt_len = printf("[%d] > ", curr_tty->id);
-	curr_tty->input_start = prompt_len;
+	printf("[%u] > ", curr_tty->id);
 	tty_set_color(fg, bg);
 }
 
