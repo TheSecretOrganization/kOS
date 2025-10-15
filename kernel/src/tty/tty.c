@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TTY_PROMPT ">"
 
 static tty_t ttys[4];
 static tty_t* curr_tty = &ttys[0];
 static uint16_t* vga_buf = (uint16_t*)VGA_MEMORY_BASE;
+static size_t prompt_len = 0;
 
 static void putendl(size_t y) {
 	for (size_t x = 0; x < VGA_WIDTH; x++)
@@ -108,7 +108,12 @@ void tty_change_screen(size_t screen_number) {
 void tty_print_prompt() {
 	if (curr_tty->column != 0)
 		return;
-	tty_putstr(TTY_PROMPT);
+	uint8_t fg = vga_get_color_fg(curr_tty->color);
+	uint8_t bg = vga_get_color_bg(curr_tty->color);
+
+	tty_set_color(VGA_COLOR_LIGHT_GREEN, bg);
+	prompt_len = printf("[%d] > ", curr_tty->id);
+	tty_set_color(fg, bg);
 }
 
 static void build_command(char* buf) {
