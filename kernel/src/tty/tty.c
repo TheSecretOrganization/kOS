@@ -35,6 +35,7 @@ void tty_init() {
 		ttys[i].row = 0;
 		ttys[i].column = 0;
 		ttys[i].color = curr_tty->color;
+		ttys[i].id = i + 1;
 		memcpy(ttys[i].buf, vga_buf, VGA_BUFFER_SIZE);
 	}
 }

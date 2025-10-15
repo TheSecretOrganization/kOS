@@ -15,6 +15,7 @@ typedef struct {
 	size_t column;
 	uint8_t color;
 	uint16_t buf[VGA_BUFFER_SIZE];
+	uint8_t id;
 } tty_t;
 
 typedef enum vga_color {
