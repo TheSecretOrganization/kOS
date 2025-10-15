@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #define TTY_MAX_SCREEN 4
+
 #define VGA_MEMORY_BASE 0xB8000
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -16,6 +17,7 @@ typedef struct {
 	uint8_t color;
 	uint16_t buf[VGA_BUFFER_SIZE];
 	uint8_t id;
+	size_t input_start;
 } tty_t;
 
 typedef enum vga_color {
