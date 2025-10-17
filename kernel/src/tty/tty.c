@@ -114,7 +114,7 @@ void tty_print_prompt() {
 	uint8_t bg = vga_get_color_bg(curr_tty->color);
 
 	tty_set_color(VGA_COLOR_LIGHT_GREEN, bg);
-	printf("[%u] > ", curr_tty->id);
+	curr_tty->input_start = printf("[%u] > ", curr_tty->id);
 	tty_set_color(fg, bg);
 }
 
