@@ -42,6 +42,14 @@ static uintptr_t get_page_table_phys(uintptr_t virt_addr, bool create) {
 	return pt_phys;
 }
 
+static inline pte_t* get_page_table(uint32_t pd_idx, uintptr_t pt_phys) {
+	if (recursive_active()) {
+		return pt_virt_for_index(pd_idx);
+	} else {
+		return (pte_t*)pt_phys;
+	}
+}
+
 void map_page(uintptr_t virt_addr, uintptr_t phys_addr, uint32_t flags) {
 	virt_addr = page_align_down(virt_addr);
 	phys_addr = page_align_down(phys_addr);
@@ -50,12 +58,7 @@ void map_page(uintptr_t virt_addr, uintptr_t phys_addr, uint32_t flags) {
 	uint32_t pd_idx = pd_index(virt_addr);
 	uint32_t pt_idx = pt_index(virt_addr);
 
-	pte_t* pt;
-	if (recursive_active()) {
-		pt = pt_virt_for_index(pd_idx);
-	} else {
-		pt = (pte_t*)pt_phys;
-	}
+	pte_t* pt = get_page_table(pd_idx, pt_phys);
 
 	pt[pt_idx] = phys_addr | flags;
 	invlpg(virt_addr);
@@ -70,13 +73,8 @@ void unmap_page(uintptr_t virt_addr) {
 	if (!(page_directory[pd_idx] & PAGE_PRESENT))
 		return;
 
-	pte_t* pt;
-	if (recursive_active()) {
-		pt = pt_virt_for_index(pd_idx);
-	} else {
-		uintptr_t pt_phys = page_align_down(page_directory[pd_idx]);
-		pt = (pte_t*)pt_phys;
-	}
+	uintptr_t pt_phys = page_align_down(page_directory[pd_idx]);
+	pte_t* pt = get_page_table(pd_idx, pt_phys);
 
 	pt[pt_idx] = 0;
 	invlpg(virt_addr);
@@ -104,13 +102,8 @@ uintptr_t get_phys_addr(uintptr_t virt_addr) {
 		return 0;
 	}
 
-	const pte_t* pt;
-	if (recursive_active()) {
-		pt = pt_virt_for_index(pd_idx);
-	} else {
-		uintptr_t pt_phys = page_align_down(page_directory[pd_idx]);
-		pt = (pte_t*)pt_phys;
-	}
+	uintptr_t pt_phys = page_align_down(page_directory[pd_idx]);
+	const pte_t* pt = get_page_table(pd_idx, pt_phys);
 
 	if (!(pt[pt_idx] & PAGE_PRESENT)) {
 		return 0;

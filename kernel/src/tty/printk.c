@@ -8,7 +8,7 @@ char* level_name[] = {"EMERG",	"ALERT", "CRIT",  "ERR", "WARN",
 					  "NOTICE", "INFO",	 "DEBUG", "",	 "CONT"};
 
 static int get_level(char c) {
-	if (c >= '0' || c <= '7')
+	if (c >= '0' && c <= '7')
 		return c - '0';
 	else if (c == 'c')
 		return 9;
