@@ -1,24 +1,27 @@
 #include "command.h"
-#include "io.h"
 #include "utils.h"
 #include <stdio.h>
 #include <string.h>
 
+typedef struct {
+	const char* name;
+	void (*handler)(void);
+} command_t;
+
+static const command_t commands[] = {
+	{"ping", &cmd_ping}, {"crash", &cmd_crash}, {"reboot", &cmd_reboot},
+	{"halt", &cmd_halt}, {"clear", &cmd_clear}, {"stack", &cmd_stack},
+	{NULL, NULL} // sentinel
+};
+
 void cmd_handle(const char* command) {
-	if (strcmp(command, "ping") == 0) {
-		cmd_ping();
-	} else if (strcmp(command, "crash") == 0) {
-		cmd_crash();
-	} else if (strcmp(command, "reboot") == 0) {
-		cmd_reboot();
-	} else if (strcmp(command, "halt") == 0) {
-		outw(0x604, 0x2000); // QEMU specific
-	} else if (strcmp(command, "clear") == 0) {
-		cmd_clear();
-	} else if (strcmp(command, "stack") == 0) {
-		cmd_stack();
-	} else {
-		if (strlen(command) > 0)
-			printf("%s: command not found\n", command);
+	for (size_t i = 0; commands[i].name != NULL; i++) {
+		if (strcmp(command, commands[i].name) == 0) {
+			commands[i].handler();
+			return;
+		}
 	}
+
+	if (strlen(command) > 0)
+		printf("%s: command not found\n", command);
 }

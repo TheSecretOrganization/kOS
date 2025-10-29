@@ -20,17 +20,13 @@ int putnbr_base_unsigned(unsigned int n, const char* base) {
 int putnbr_base(long n, const char* base) {
 	if (!base)
 		return 0;
-	int len = 1;
-	size_t base_size = strlen(base);
+	int len = 0;
 	if (n < 0) {
 		tty_putchar('-');
 		n = -n;
 		++len;
 	}
-	if (n / base_size)
-		len += putnbr_base(n / base_size, base);
-	tty_putchar(base[n % base_size]);
-	return len;
+	return len + putnbr_base_unsigned((unsigned int)n, base);
 }
 
 int putstr_count(char* str) {

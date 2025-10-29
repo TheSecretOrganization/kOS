@@ -1,5 +1,6 @@
 #include "pic.h"
 #include "io.h"
+#include <stdbool.h>
 
 void outb_wait(uint16_t port, uint8_t val) {
 	outb(port, val);
@@ -12,7 +13,7 @@ void pic_eoi(uint8_t irq) {
 	outb(PIC_PARENT_COMMAND, PIC_EOI);
 }
 
-void pic_enable_irq(uint8_t irq) {
+static void pic_set_irq_mask(uint8_t irq, bool enable) {
 	uint16_t port;
 	uint8_t mask;
 
@@ -23,24 +24,18 @@ void pic_enable_irq(uint8_t irq) {
 		irq -= 8;
 	}
 
-	mask = inb(port) & ~(1 << irq);
-	outb(port, mask);
-}
-
-void pic_disable_irq(uint8_t irq) {
-	uint16_t port;
-	uint8_t mask;
-
-	if (irq < 8) {
-		port = PIC_PARENT_DATA;
+	mask = inb(port);
+	if (enable) {
+		mask &= ~(1 << irq);
 	} else {
-		port = PIC_CHILD_DATA;
-		irq -= 8;
+		mask |= (1 << irq);
 	}
-
-	mask = inb(port) | (1 << irq);
 	outb(port, mask);
 }
+
+void pic_enable_irq(uint8_t irq) { pic_set_irq_mask(irq, true); }
+
+void pic_disable_irq(uint8_t irq) { pic_set_irq_mask(irq, false); }
 
 void pic_remap(int parent_offset, int child_offset) {
 	outb_wait(PIC_PARENT_COMMAND, PIC_ICW1_INIT);
